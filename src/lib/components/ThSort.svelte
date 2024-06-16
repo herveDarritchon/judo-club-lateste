@@ -1,20 +1,23 @@
 <script lang="ts">
-	import type { DataHandler } from '@vincjo/datatables/remote';
+	import type { DataHandler } from '@vincjo/datatables';
 
 	export let handler: DataHandler;
 	export let orderBy: string;
 
-	const sort = handler.getSort();
-
-	const update = () => {
-		handler.sort(orderBy);
-		handler.invalidate();
-	};
+	const sorted = handler.getSort();
 </script>
 
-<th on:click={update} class="cursor-pointer select-none p-2 px-5">
+<th on:click={() => handler.sort(orderBy)} class="cursor-pointer select-none">
 	<div class="flex h-full items-center justify-start gap-x-2">
 		<slot />
-		[sort]
+		{#if $sorted.identifier === orderBy}
+			{#if $sorted.direction === 'asc'}
+				&darr;
+			{:else if $sorted.direction === 'desc'}
+				&uarr;
+			{/if}
+		{:else}
+			&updownarrow;
+		{/if}
 	</div>
 </th>

@@ -1,22 +1,24 @@
 <script lang="ts">
-	import { reloadMembre } from '$lib/data/api';
 
-	import type { State } from '@vincjo/datatables/remote';
-	import { DataHandler } from '@vincjo/datatables/remote';
+	//Import local datatable components
 	import ThSort from '$lib/components/ThSort.svelte';
+	import ThFilter from '$lib/components/ThFilter.svelte';
+	import Search from '$lib/components/Search.svelte';
 	import RowsPerPage from '$lib/components/RowsPerPage.svelte';
 	import RowCount from '$lib/components/RowCount.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
-	import ThFilter from '$lib/components/ThFilter.svelte';
-	import Search from '$lib/components/Search.svelte';
-	import type { Membre } from '$lib/data/models/Membre';
-	import type { Writable } from 'svelte/store';
 
-	const handler: DataHandler<Membre> = new DataHandler<Membre>([], { rowsPerPage: 5, totalRows: 200 });
-	const rows: Writable<Membre[]> = handler.getRows();
+	//Load remote data
+	export let data;
 
-	handler.onChange((state: State) => reloadMembre(state));
-	handler.invalidate();
+	console.log("Data", data);
+
+	//Import handler from SSD
+	import { DataHandler } from '@vincjo/datatables';
+
+	//Init data handler - CLIENT
+	const handler = new DataHandler(data.data, { rowsPerPage: 5 });
+	const rows = handler.getRows();
 </script>
 
 <div class=" overflow-x-auto space-y-4">

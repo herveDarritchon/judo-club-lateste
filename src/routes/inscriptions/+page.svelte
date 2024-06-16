@@ -1,5 +1,7 @@
 <script lang="ts">
 	import InscriptionDatatable from '$lib/components/InscriptionDatatable.svelte';
+
+	export let data;
 </script>
 
 <div class="space-y-10">
@@ -28,5 +30,5 @@
 	<!-- Divider -->
 	<hr />
 	<!-- Component -->
-	<InscriptionDatatable />
+	<InscriptionDatatable {data}/>
 </div>

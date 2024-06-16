@@ -4,16 +4,16 @@
 	</header>
 	<!-- CTA -->
 	<div class="text-center">
-		<a class="btn variant-filled" href="http://localhost:8888/judolateste/wp-admin/" target="_blank">
+		<a class="btn variant-filled" href="http://localhost:8888/judolateste/" target="_blank">
 			Pour se rendre sur le site du Judo &rarr;
 		</a>
 	</div>
 	<!-- Links -->
 	<div class="max-w-[600px] mx-auto grid grid-cols-1 gap-4">
-		<!-- Client -->
+		<!-- Inscriptions -->
 		<a class="card card-hover overflow-hidden" href="/inscriptions">
 			<header class="flex justify-between items-center p-4">
-				<h3 class="h3">Inscriptions</h3>
+				<h3 class="h3"><i class="fa-brands fa-wpforms mr-1"></i> Inscriptions</h3>
 				<h3 class="h3">&rarr;</h3>
 			</header>
 			<hr class="hr" />
@@ -23,10 +23,10 @@
 				</article>
 			</div>
 		</a>
-		<!-- Server -->
+		<!-- Membres -->
 		<a class="card card-hover overflow-hidden" href="/membres">
 			<header class="flex justify-between items-center p-4">
-				<h3 class="h3">Membres</h3>
+				<h3 class="h3"><i class="fa-solid fa-person mr-1"></i> Membres</h3>
 				<h3 class="h3">&rarr;</h3>
 			</header>
 			<hr class="hr" />
@@ -34,6 +34,21 @@
 				<article>
 					<p>
 						La liste des membres de la saison en cours (2023/2024).
+					</p>
+				</article>
+			</div>
+		</a>
+		<!-- Historique -->
+		<a class="card card-hover overflow-hidden" href="/">
+			<header class="flex justify-between items-center p-4">
+				<h3 class="h3"><i class="fa-solid fa-box-archive mr-1"></i> Historique (en construction)</h3>
+				<h3 class="h3">&rarr;</h3>
+			</header>
+			<hr class="hr" />
+			<div class="p-4 space-y-4">
+				<article>
+					<p>
+						Pour avoir accés aux saisons précédentes (membres).
 					</p>
 				</article>
 			</div>

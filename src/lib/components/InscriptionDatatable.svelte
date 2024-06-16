@@ -9,19 +9,16 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 
 	//Load remote data
-	import { reloadInscription } from '$lib/data/api';
+	export let data;
 
-	//Import handler & Types from SSD remote
-	import { DataHandler } from '@vincjo/datatables/remote';
-	import type { State } from '@vincjo/datatables/remote';
-	import type { Inscription } from '$lib/data/models/Inscription';
+	console.log("Data", data);
 
-	//Init data handler - SERVER
-	const handler = new DataHandler<Inscription>([], { rowsPerPage: 5, totalRows: 200 });
+	//Import handler from SSD
+	import { DataHandler } from '@vincjo/datatables';
+
+	//Init data handler - CLIENT
+	const handler = new DataHandler(data.data, { rowsPerPage: 5 });
 	const rows = handler.getRows();
-
-	handler.onChange((state: State) => reloadInscription(state));
-	handler.invalidate();
 </script>
 
 <div class=" overflow-x-auto space-y-4">
