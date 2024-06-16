@@ -18,6 +18,11 @@
 	//Init data handler - CLIENT
 	const handler = new DataHandler(data.data, { rowsPerPage: 5 });
 	const rows = handler.getRows();
+
+	function handleDelete(id: string): boolean {
+		console.log('Delete', id);
+		return true;
+	}
 </script>
 
 <div class=" overflow-x-auto space-y-4">
@@ -75,34 +80,38 @@
 				<td>{row.telephone_number}</td>
 				<td>{row.email_address}</td>
 				<td class="row-auto">
-					<button type="button" class="btn-icon btn-icon-sm variant-filled"
+					<a type="button" class="btn-icon btn-icon-sm variant-filled"
+						 href="/inscriptions/{row.id}/display"
 									data-tooltip-target="tooltip-display-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-display"></i>
-					</button>
+					</a>
 					<div id="tooltip-display-{row.id}" role="tooltip"
 							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
 						Voir l'inscription complète de {row.subscription_name}.
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
-					<button type="button" class="btn-icon btn-icon-sm variant-filled"
+					<a type="button" class="btn-icon btn-icon-sm variant-filled"
+						 href="/inscriptions/{row.id}/edit"
 									data-tooltip-target="tooltip-edit-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-pen-to-square"></i>
-					</button>
+					</a>
 					<div id="tooltip-edit-{row.id}" role="tooltip"
 							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
 						Editer pour modification l'inscription de {row.subscription_name}.
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
-					<button type="button" class="btn-icon btn-icon-sm variant-filled"
-									data-tooltip-target="tooltip-pdf-{row.id}" data-tooltip-placement="left">
+					<a type="button" class="btn-icon btn-icon-sm variant-filled"
+						 href="/inscriptions/{row.id}/pdf"
+						 data-tooltip-target="tooltip-pdf-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-file-pdf"></i>
-					</button>
+					</a>
 					<div id="tooltip-pdf-{row.id}" role="tooltip"
 							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
 						Générer le pdf pour imprimer l'inscription de {row.subscription_name}.
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
 					<button type="button" class="btn-icon btn-icon-sm variant-filled"
+									on:click="{handleDelete(row.id)}"
 									data-tooltip-target="tooltip-delete-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-trash"></i>
 					</button>

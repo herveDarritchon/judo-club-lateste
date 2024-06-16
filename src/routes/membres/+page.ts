@@ -3,6 +3,7 @@ export async function load({ fetch }) {
 	const data = await response.json();
 
 	return {
-		data
+		data,
+		membres: data.data,
 	};
 }
