@@ -23,4 +23,6 @@ export interface Membre extends Row {
 	extranet_validation_date: string;
 	extranet_validation_check: boolean;
 	dojo: string;
+	annee_saison: string;
+	categorie: string;
 }
