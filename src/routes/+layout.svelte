@@ -22,9 +22,13 @@
 			</svelte:fragment>
 			<!-- Github  -->
 			<svelte:fragment slot="trail">
+				<a type="button" class="btn space-x-2 variant-soft hover:variant-soft-primary" href="/login">
+					<span><i class="fa-solid fa-user"></i></span>
+					<span>Connexion</span>
+				</a>
 				<a
 					class="btn space-x-4 variant-soft hover:variant-soft-primary"
-					href="https://github.com/skeletonlabs/skeleton-datatables-integration"
+					href="http://localhost:8888/judolateste/"
 					target="_blank"
 				>
 					<img src="/Logo_Judo_Testerin-Noir.png" alt="Judo Club La Teste" class="w-12 h-12" />
