@@ -2,7 +2,7 @@
 	import { setError, setMessage, superForm } from 'sveltekit-superforms';
 	import { _userSchema } from './+page.js';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { createToken } from '$lib/data/api';
+	import { JWTAuthService } from '$lib/security/JWTAuthService';
 
 	export let data;
 
@@ -17,7 +17,7 @@
 					setError(form, 'email', 'Suspicious email address.');
 				} else if (form.valid) {
 					// TODO: Call an external API with form.data, await the result and update form
-					const token = await createToken(form.data.email, form.data.password);
+					const token = await new JWTAuthService("http://localhost:8888/judolateste").createTokenFromCredentials(form.data.email, form.data.password, crypto.randomUUID());
 					setMessage(form, 'Valid data!' + token);
 				}
 			}
