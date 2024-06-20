@@ -1,13 +1,20 @@
-import {
-	JWTAuthBody,
-	type JWTAuthBodyProps,
-	JWTAuthCookies,
-	JWTAuthHeaders,
-	JWTAuthNoCookies
-} from '$lib/security/JWTAuthRequest';
+import { JWTAuthBody, type JWTAuthBodyProps } from '$lib/security/body/JWTAuthBody';
+import { JWTAuthCookies, JWTAuthNoCookies } from '$lib/security/cookie/JWTAuthCookie';
+import { JWTAuthHeaders } from '$lib/security/header/JWTAuthHeader';
 import type { StorageService } from '$lib/storage/StorageService';
-import { type AuthToken, JWTAuthToken, type RefreshToken } from '$lib/security/JWTAuthToken';
+import { type AuthToken, InvalidAuthToken, JWTAuthToken } from '$lib/security/authToken/JWTAuthToken';
+import { InvalidRefreshToken, type RefreshToken } from '$lib/security/refreshToken/JWTRefreshToken';
+import type { JWTAuthResponseProps } from '$lib/security/JWTAuthResponse';
 
+/**
+ * JWTAuthService
+ *  - A service to handle JWT authentication
+ *  - It creates and refreshes JWT tokens
+ *  - It validates JWT tokens
+ *  - It stores the tokens in the storage
+ *  @export
+ *  @public
+ */
 export class JWTAuthService {
 	private readonly apiUrl: string;
 	private readonly AUTH_TOKEN_KEY = 'auth_token';
@@ -43,12 +50,13 @@ export class JWTAuthService {
 			return null;
 		}
 
-		const refreshTokenCookie = cookies.split(';').find(cookie => cookie.trim().startsWith('refresh_token='));
+		const refreshTokenCookie = cookies.split(';')
+			.find(cookie => cookie.trim().startsWith('refresh_token='));
 		if (!refreshTokenCookie) {
 			return null;
 		}
 
-		return refreshTokenCookie.split('=')[1];
+		return decodeURIComponent(refreshTokenCookie.trim().substring('refresh_token='.length));
 	}
 
 	// Create token from credentials (username and password)
@@ -70,18 +78,18 @@ export class JWTAuthService {
 	}
 
 	// Create token from refresh token
-	async createTokenFromRefreshToken(device: string = ''): Promise<JWTAuthToken> {
+	async createTokenFromRefreshToken(device: string = ''): Promise<AuthToken> {
 		const body: JWTAuthBodyProps = device === '' ? {} : { device };
-		const refreshToken = this.storageService.read(this.REFRESH_TOKEN_KEY);
-		if (!refreshToken) {
+		const refreshToken: RefreshToken = this.storageService.read(this.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();
+		if (!refreshToken || !refreshToken.isValid()) {
 			throw new Error('No refresh token found');
 		}
-		const cookies = new JWTAuthCookies({ [this.REFRESH_TOKEN_KEY]: refreshToken });
+		const cookies = new JWTAuthCookies(this.REFRESH_TOKEN_KEY, refreshToken.value);
 		const response = await this.request('/wp-json/jwt-auth/v1/token', 'POST', new JWTAuthBody(body), new JWTAuthHeaders(), cookies);
 
 		const data = await response.json();
 		console.log('Token creation:', data);
-		return new JWTAuthToken(data);
+		return new JWTAuthToken(data).authToken;
 	}
 
 	// Refresh token
@@ -103,12 +111,12 @@ export class JWTAuthService {
 		return data.isValid();
 	}
 
-	getToken(device: string): AuthToken {
-		const token: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY);
+	async getToken(device: string): Promise<AuthToken> {
+		const token: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
 		if (!token || !token.isValid()) {
-			const token: RefreshToken = this.storageService.read(this.REFRESH_TOKEN_KEY);
+			const token: RefreshToken = this.storageService.read(this.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();
 			if (!token || !token.isValid()) {
-				throw new Error('No refresh token found or token is invalid');
+				throw new Error('No refresh token found or auth token is invalid');
 			}
 			return await this.createTokenFromRefreshToken(device);
 		}
