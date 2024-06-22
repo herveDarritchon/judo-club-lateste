@@ -79,8 +79,31 @@ export class InvalidAuthToken extends AuthToken {
  * @public
  */
 export class JWTAuthToken {
-	authToken: AuthToken;
-	user: UserData;
+	/**
+	 * Property to store the token
+	 * @type {AuthToken}
+	 * @memberof JWTAuthToken
+	 * @public
+	 * @example
+	 * const authToken = new AuthToken({ value: 'authToken', createdAt: new Date() });
+	 */
+	readonly authToken: AuthToken;
+	/**
+	 * Property to store the user data
+	 * @type {UserData}
+	 * @memberof JWTAuthToken
+	 * @public
+	 * @example
+	 * {
+	 * 	id: 1,
+	 * 	email: 'email',
+	 * 	nicename: 'nicename',
+	 * 	firstName: 'firstName',
+	 * 	lastName: 'lastName',
+	 * 	displayName: 'displayName'
+	 * }
+	 */
+	readonly user: UserData;
 
 	/**
 	 * Constructor to create a JWTAuthToken instance
@@ -113,25 +136,5 @@ export class JWTAuthToken {
 	 */
 	isValid(): boolean {
 		return (this.authToken && this.user && this.authToken.isValid());
-	}
-
-	/**
-	 * Method to get the token
-	 * @returns {string} The token
-	 * @memberof JWTAuthToken
-	 * @public
-	 */
-	getAuthToken(): AuthToken {
-		return this.authToken;
-	}
-
-	/**
-	 * Method to get the user data
-	 * @returns {UserData} The user data
-	 * @memberof JWTAuthToken
-	 * @public
-	 */
-	getUser(): UserData {
-		return this.user;
 	}
 }

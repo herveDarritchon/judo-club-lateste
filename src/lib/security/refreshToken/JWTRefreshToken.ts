@@ -22,7 +22,7 @@ export class RefreshToken {
 
 	constructor(json: RefreshTokenProps) {
 		this.value = json.value;
-		this.expireAt = json.expireAt;
+		this.expireAt = new Date(json.expireAt);
 	}
 
 	isValid(): boolean {
@@ -40,9 +40,14 @@ export class RefreshToken {
  */
 export class InvalidRefreshToken extends RefreshToken {
 	constructor() {
+		const minimumDatePossible = new Date(-8640000000000000);
 		super({
-			value: 'invalid-value', expireAt: new Date()
+			value: 'invalid-value', expireAt: minimumDatePossible
 		});
+	}
+
+	isValid(): boolean {
+		return false;
 	}
 }
 
@@ -53,7 +58,7 @@ export class InvalidRefreshToken extends RefreshToken {
  * @class JWTAuthRefreshTokenService
  * @public
  */
-export class JWTAuthRefreshToken {
+export class JWTAuthRefreshTokenService {
 	value: string;
 	expireAt: Date;
 
@@ -65,7 +70,7 @@ export class JWTAuthRefreshToken {
 	 * @example
 	 * const refreshToken = new JWTAuthRefreshToken({ value: 'refreshToken', expireAt: new Date() });
 	 */
-	constructor(json: RefreshToken) {
+	constructor(json: RefreshTokenProps) {
 		this.value = json.value;
 		this.expireAt = json.expireAt;
 	}

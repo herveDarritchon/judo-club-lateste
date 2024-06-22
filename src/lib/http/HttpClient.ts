@@ -1,7 +1,14 @@
-import { JWTAuthBody, JWTAuthCookies, JWTAuthHeaders } from '$lib/security/JWTAuthRequest';
-import { JWTAuthService } from '$lib/security/JWTAuthService';
-import type { StorageService } from '$lib/storage/StorageService';
-import type { DeviceFingerPrint } from '$lib/security/DeviceFingerPrint';
+import { JWTAuthBody } from '$lib/security/body/JWTAuthBody';
+import { JWTAuthHeaders } from '$lib/security/header/JWTAuthHeader';
+import { JWTAuthCookies } from '$lib/security/cookie/JWTAuthCookie';
+
+export class HttpFetcher {
+	public readonly fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+
+	constructor(fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>) {
+		this.fetch = fetch;
+	}
+}
 
 /**
  * HttpClient - A class to handle HTTP requests to the API server
@@ -9,19 +16,17 @@ import type { DeviceFingerPrint } from '$lib/security/DeviceFingerPrint';
  * @public
  */
 export class HttpClient {
-	private readonly apiUrl: string;
-	private readonly jwtAuthService: JWTAuthService;
-	private deviceFingerPrint: DeviceFingerPrint;
+	private readonly serverBaseUrl: string;
+	private readonly fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 
 	/**
 	 * Constructor to create an HttpClient instance
-	 * @param apiUrl
-	 * @param storageService
+	 * @param apiUrl - The URL of the API server
+	 * @param fetcher
 	 */
-	constructor(apiUrl: string, storageService: StorageService) {
-		this.apiUrl = apiUrl;
-		this.deviceFingerPrint = new DeviceFingerPrint(storageService);
-		this.jwtAuthService = new JWTAuthService(apiUrl, storageService);
+	constructor(apiUrl: string, fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response>) {
+		this.serverBaseUrl = apiUrl;
+		this.fetcher = fetcher;
 	}
 
 	/**
@@ -35,18 +40,17 @@ export class HttpClient {
 	 * @public
 	 */
 	async request(path: string, method: string, body: JWTAuthBody, headers: JWTAuthHeaders, cookies: JWTAuthCookies): Promise<Response> {
-
-		const token = new JWTAuthService(path).getToken(this.deviceFingerPrint.get());
-		const response = await fetch(`${this.apiUrl}${path}`, {
+		const response = await this.fetcher(`${this.serverBaseUrl}${path}`, {
 			method: method,
+			credentials: 'include', // Inclure les cookies pour les requêtes cross-origin
 			headers: {
 				...headers.getHeaders(),
 				'Cookie': cookies.getCookieString()
 			},
 			body: JSON.stringify(body)
 		});
-		const data = await response.json();
 		if (!response.ok) {
+			const data = await response.json();
 			throw new Error(data.message || 'Request failed');
 		}
 		return response;

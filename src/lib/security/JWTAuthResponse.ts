@@ -23,7 +23,7 @@ export interface JWTAuthResponseProps {
 	statusCode: number;
 	code: string;
 	message: string;
-	data: JWTAuthDataResponseProps | unknown[];
+	data: JWTAuthDataResponseProps | [];
 }
 
 /**
@@ -37,7 +37,7 @@ export class JWTAuthResponse {
 	statusCode: number;
 	code: string;
 	message: string;
-	data: JWTAuthDataResponseProps | unknown[];
+	data: JWTAuthDataResponseProps | [];
 
 	/**
 	 * Constructor to create a JWTAuthResponse instance
@@ -63,15 +63,6 @@ export class JWTAuthResponse {
 	}
 
 	/**
-	 * Method to check if the response has unknown data
-	 * @returns boolean - True if the response has unknown data and false otherwise
-	 * @public
-	 */
-	hasUnknonwData(): boolean {
-		return this.isArray(this.data);
-	}
-
-	/**
 	 * Method to check if the response has JWTAuthData
 	 * @returns boolean - True if the response has JWTAuthData and false otherwise
 	 * @public
@@ -81,21 +72,12 @@ export class JWTAuthResponse {
 	}
 
 	/**
-	 * Method to check if the data is an array
-	 * @param data - The data to check
-	 * @private
-	 */
-	private isArray(data: unknown): data is unknown[] {
-		return Array.isArray(data);
-	}
-
-	/**
 	 * Method to check if the data is JWTAuthDataResponseProps
 	 * @param data
 	 * @private
 	 */
 	private isJWTAuthDataResponseProps(data: unknown): data is JWTAuthDataResponseProps {
-		return !!(data && typeof data === 'object' && 'token' in data && 'user' in data);
+		return !!(data && typeof data === 'object' && 'token' in data && 'email' in data);
 	}
 
 	/**

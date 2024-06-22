@@ -55,4 +55,21 @@ export class JWTAuthHeaders {
 	getHeaders(): JWTAuthHeadersProps {
 		return this.headers;
 	}
+
+	// Helper function to extract refresh_token from response headers
+	static extractCookieFrom(headers: Headers, key: string): string | null {
+		const cookies = headers.get('set-cookie');
+		if (!cookies) {
+			return null;
+		}
+
+		const cookieKey = key + '=';
+		const refreshTokenCookie = cookies.split(';')
+			.find(cookie => cookie.trim().startsWith(cookieKey));
+		if (!refreshTokenCookie) {
+			return null;
+		}
+
+		return decodeURIComponent(refreshTokenCookie.trim().substring(cookieKey.length));
+	}
 }
