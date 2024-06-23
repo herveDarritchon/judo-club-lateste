@@ -9,12 +9,14 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
+	import type { Membre } from '$lib/data/models/Membre';
 
 	//Load remote data
-	export let data;
+	export let members: Membre[] = [];
 
-	//Init data handler - CLIENT
-	const handler = new DataHandler(data.data, { rowsPerPage: 5 });
+	console.log("Members in MemberDatatable component:", members);
+
+	const handler = new DataHandler(members, { rowsPerPage: 5 });
 	const rows = handler.getRows();
 
 </script>

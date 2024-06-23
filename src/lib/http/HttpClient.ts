@@ -24,7 +24,7 @@ export class HttpClient {
 	 * @param apiUrl - The URL of the API server
 	 * @param fetcher
 	 */
-	constructor(apiUrl: string, fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response>) {
+	constructor(apiUrl: string, fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response> = fetch) {
 		this.serverBaseUrl = apiUrl;
 		this.fetcher = fetcher;
 	}
@@ -39,7 +39,13 @@ export class HttpClient {
 	 * @returns Promise<Response> - The response of the request as a promise
 	 * @public
 	 */
-	async request(path: string, method: string, body: JWTAuthBody, headers: JWTAuthHeaders, cookies: JWTAuthCookies): Promise<Response> {
+	async request<T>(path: string, method: string, body: T, headers: JWTAuthHeaders, cookies: JWTAuthCookies): Promise<Response> {
+		console.log('path', path);
+		console.log('method', method);
+		console.log('body', body);
+		console.log('headers', headers);
+		console.log('cookies', cookies);
+
 		const response = await this.fetcher(`${this.serverBaseUrl}${path}`, {
 			method: method,
 			credentials: 'include', // Inclure les cookies pour les requêtes cross-origin

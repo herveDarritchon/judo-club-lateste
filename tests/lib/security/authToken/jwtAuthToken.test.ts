@@ -62,7 +62,7 @@ describe('JWTAuthToken', () => {
 			statusCode: 200,
 			code: 'jwt_auth_valid_token',
 			message: 'Valid token',
-			data: undefined
+			data: []
 		});
 
 		expect(() => new JWTAuthToken(json)).toThrow('Invalid JWTAuthData');

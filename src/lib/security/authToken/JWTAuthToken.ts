@@ -31,7 +31,7 @@ export class AuthToken {
 	 */
 	constructor(json: AuthTokenProps) {
 		this.value = json.value;
-		this.createdAt = json.createdAt;
+		this.createdAt = new Date(json.createdAt);
 	}
 
 	/**

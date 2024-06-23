@@ -24,7 +24,7 @@ beforeEach(() => {
 	storage = new MockStorage();
 	storageService = new StorageService(storage);
 	mockFetch = new MockFetch();
-	client = new TestHttpAuthenticatedClient(serverBaseUrl, mockFetch.fetch.bind(mockFetch), storageService);
+	client = new TestHttpAuthenticatedClient(serverBaseUrl, storageService, mockFetch.fetch.bind(mockFetch));
 
 });
 

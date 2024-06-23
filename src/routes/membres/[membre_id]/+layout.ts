@@ -1,16 +1,20 @@
-import { error } from '@sveltejs/kit';
+import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
+import { StorageService } from '$lib/storage/StorageService';
+import { HttpMethod } from '$lib/http/HttpMethod';
 
 export async function load({ params, fetch }) {
-	const response = await fetch('http://localhost:8888/judolateste/wp-json/associationManagement/v1/members/'+params.membre_id);
-
-	if (response.status >= 400) {
-		throw error(response.status, response.statusText);
+	const membreId = params.membre_id;
+	let member;
+	try {
+		const response = await new HttpAuthenticatedClient('http://localhost:8888/judolateste', new StorageService(localStorage), fetch)
+			.request('/wp-json/associationManagement/v1/members/' + membreId, HttpMethod.GET);
+		member = await response.json();
+	} catch (error: any) {
+		const message = `Erreur de récupération des infos du Current User ${membreId} avec comme cause ${error.message}`;
+		console.warn(message, error);
+		throw new Error(message);
 	}
-
-	const data = await response.json();
-
 	return {
-		data,
-		membre: data.data,
+		member
 	};
 }

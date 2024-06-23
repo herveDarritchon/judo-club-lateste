@@ -1,7 +1,15 @@
 <script lang="ts">
 	import MembreDatatable from '$lib/components/MembreDatatable.svelte';
+	import type { User } from '$lib/models/User';
+	import type { Membre } from '$lib/data/models/Membre';
 
-	export let data;
+	export let data: { user: User, members: Membre[] };
+
+	console.log('Data from Member +page.svelte:', data);
+
+	const members: Membre[] = data.members;
+	console.log('Members from Member +page.svelte:', members);
+
 </script>
 
 <div class="space-y-10">
@@ -13,5 +21,5 @@
 	<!-- Divider -->
 	<hr />
 	<!-- Component -->
-	<MembreDatatable {data} />
+	<MembreDatatable {members} />
 </div>

@@ -1,4 +1,5 @@
 import type { StorageService } from '$lib/storage/StorageService';
+import { Fingerprint } from '$lib/security/fingerPrint/FingerPrint';
 
 /**
  * DeviceFingerPrint
@@ -10,6 +11,7 @@ export class DeviceFingerPrint {
 	private readonly DEVICE_ID_KEY = 'device_id';
 	private deviceId: string = '';
 	private storageService: StorageService;
+	private static deviceId: Promise<string>;
 
 	/**
 	 * Constructor
@@ -25,12 +27,13 @@ export class DeviceFingerPrint {
 	 * @returns The device fingerprint
 	 * @public
 	 */
-	get(): string {
-		if (!this.deviceId) {
-			this.deviceId = this.storageService.read(this.DEVICE_ID_KEY) || this.generate();
-			this.storageService.save(this.DEVICE_ID_KEY, this.deviceId);
+	static async get(): Promise<string> {
+		if (!DeviceFingerPrint.deviceId) {
+			DeviceFingerPrint.deviceId = Fingerprint.generate();
+			/*			this.deviceId = this.storageService.read(this.DEVICE_ID_KEY) || this.generate();
+						this.storageService.save(this.DEVICE_ID_KEY, this.deviceId);*/
 		}
-		return this.deviceId;
+		return DeviceFingerPrint.deviceId;
 	}
 
 	/**

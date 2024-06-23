@@ -1,6 +1,13 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell } from '@skeletonlabs/skeleton';
+	import { page } from '$app/stores';
+
+	console.log('Page:', $page);
+
+	export let data;
+
+	console.log('Data from layout:', data);
 </script>
 
 <!-- App Shell -->
@@ -17,10 +24,23 @@
 			</svelte:fragment>
 			<!-- Github  -->
 			<svelte:fragment slot="trail">
-				<a type="button" class="btn space-x-2 variant-soft hover:variant-soft-primary" href="/login">
-					<span><i class="fa-solid fa-user"></i></span>
-					<span>Connexion</span>
-				</a>
+				{#if data.user.id === 0}
+					<a type="button" class="btn space-x-2 variant-soft hover:variant-soft-primary" href="/login">
+						<span><i class="fa-solid fa-user"></i></span>
+						<span>Connexion</span>
+					</a>
+				{:else}
+					<div class="flex-1 flex-col align-middle justify-center content-center"
+							 data-tooltip-target="tooltip-username">
+						<img class="mx-auto" src="{data.user.avatar_urls['48']}" alt="avatar de l'utilisateur">
+						<span>{data.user.slug}</span>
+					</div>
+					<div id="tooltip-username" role="tooltip"
+							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+						{data.user.name}
+						<div class="tooltip-arrow" data-popper-arrow></div>
+					</div>
+				{/if}
 				<a
 					class="btn space-x-4 variant-soft hover:variant-soft-primary"
 					href="http://localhost:8888/judolateste/"

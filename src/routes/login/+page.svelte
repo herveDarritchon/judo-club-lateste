@@ -2,9 +2,10 @@
 	import { setError, setMessage, superForm } from 'sveltekit-superforms';
 	import { _userSchema } from './+page.js';
 	import { zod } from 'sveltekit-superforms/adapters';
-	import { JWTAuthService } from '$lib/security/JWTAuthService';
+	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
 
 	export let data;
+	console.log('Data from +page.svelte:', data);
 
 	const { form, errors, message, constraints, enhance } = superForm(
 		data.form,
@@ -17,7 +18,7 @@
 					setError(form, 'email', 'Suspicious email address.');
 				} else if (form.valid) {
 					// TODO: Call an external API with form.data, await the result and update form
-					const token = await new JWTAuthService("http://localhost:8888/judolateste").createTokenFromCredentials(form.data.email, form.data.password, crypto.randomUUID());
+					const token = await new HttpAuthenticatedClient("http://localhost:8888/judolateste").createTokenFromCredentials(form.data.email, form.data.password);
 					setMessage(form, 'Valid data!' + token);
 				}
 			}

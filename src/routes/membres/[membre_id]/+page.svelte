@@ -15,5 +15,5 @@
 	<!-- Divider -->
 	<hr />
 	<!-- Component -->
-	<h3>{data.data.data.subscription_name}</h3>
+	<h3>{data.member.subscription_name}</h3>
 </div>

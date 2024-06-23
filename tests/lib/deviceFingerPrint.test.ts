@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { StorageService } from '$lib/storage/StorageService';
-import { DeviceFingerPrint } from '$lib/security/DeviceFingerPrint';
+import { DeviceFingerPrint } from '$lib/security/fingerPrint/DeviceFingerPrint';
 import { MockStorage } from './storage/MockStorage';
 
 let storageService: StorageService;

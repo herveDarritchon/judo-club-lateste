@@ -2,7 +2,7 @@
 	import type { Inscription } from '$lib/data/models/Inscription';
 
 	export let data;
-	export let inscription: Inscription = data.data.data
+	export let inscription: Inscription = data
 
 </script>
 

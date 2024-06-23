@@ -2,7 +2,10 @@
 	import type { Membre } from '$lib/data/models/Membre';
 
 	export let data;
-	export let membre: Membre = data.data.data;
+
+	export let membre: Membre = data.member.data;
+	console.log('Data from Display Member +page.svelte:', membre);
+
 
 </script>
 

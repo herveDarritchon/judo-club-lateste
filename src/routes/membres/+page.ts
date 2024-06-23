@@ -1,14 +1,18 @@
-import { JWTAuthService } from '$lib/security/JWTAuthService';
+import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
+import { HttpMethod } from '$lib/http/HttpMethod';
+import { StorageService } from '$lib/storage/StorageService';
 
 export async function load({ fetch }) {
-	const deviceId = localStorage.getItem('device_id') ?? '';
-	new JWTAuthService('http://localhost:8888/judolateste').createTokenFromRefreshToken(deviceId);
-
-	const response = await fetch('http://localhost:8888/judolateste/wp-json/associationManagement/v1/members');
-	const data = await response.json();
-
+	let members;
+	try {
+		const response = await new HttpAuthenticatedClient('http://localhost:8888/judolateste', new StorageService(localStorage), fetch)
+			.request('/wp-json/associationManagement/v1/members', HttpMethod.GET);
+		members = await response.json();
+	} catch (e) {
+		console.warn('Erreur de récupération des infos du Current User:', e);
+		members = [];
+	}
 	return {
-		data,
-		membres: data.data,
+		members
 	};
 }

@@ -2,12 +2,12 @@ import { JWTAuthHeaders } from '$lib/security/header/JWTAuthHeader';
 import { HttpClient } from '$lib/http/HttpClient';
 import { JWTAuthBody, type JWTAuthBodyProps } from '$lib/security/body/JWTAuthBody';
 import { JWTAuthCookies, JWTAuthNoCookies } from '$lib/security/cookie/JWTAuthCookie';
-import { type AuthToken, InvalidAuthToken, JWTAuthToken } from '$lib/security/authToken/JWTAuthToken';
+import { AuthToken, InvalidAuthToken, JWTAuthToken } from '$lib/security/authToken/JWTAuthToken';
 import { InvalidRefreshToken, RefreshToken, type RefreshTokenProps } from '$lib/security/refreshToken/JWTRefreshToken';
 import { JWTAuthResponse } from '$lib/security/JWTAuthResponse';
 import { HttpMethod } from '$lib/http/HttpMethod';
-import type { StorageService } from '$lib/storage/StorageService';
-import { DeviceFingerPrint } from '$lib/security/DeviceFingerPrint';
+import { StorageService } from '$lib/storage/StorageService';
+import { DeviceFingerPrint } from '$lib/security/fingerPrint/DeviceFingerPrint';
 
 /**
  * HttpClient - A class to handle HTTP requests to the API server
@@ -22,10 +22,10 @@ export class HttpAuthenticatedClient extends HttpClient {
 	/**
 	 * Constructor to create an HttpClient instance
 	 * @param serverBaseUrl - The URL of the API server
-	 * @param fetcher
 	 * @param storageService
+	 * @param fetcher
 	 */
-	constructor(serverBaseUrl: string, fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response>, storageService: StorageService) {
+	constructor(serverBaseUrl: string, storageService: StorageService = new StorageService(localStorage), fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response> = fetch) {
 		super(serverBaseUrl, fetcher);
 		this.storageService = storageService;
 	}
@@ -40,15 +40,16 @@ export class HttpAuthenticatedClient extends HttpClient {
 	 * @returns Promise<Response> - The response of the request as a promise
 	 * @public
 	 */
-	async request(path: string, method: string, body: JWTAuthBody, headers: JWTAuthHeaders, cookies: JWTAuthCookies): Promise<Response> {
-		const deviceId = new DeviceFingerPrint(this.storageService).get();
+	async request<T>(path: string, method: string, body?: T, headers: JWTAuthHeaders = new JWTAuthHeaders(), cookies: JWTAuthCookies = new JWTAuthNoCookies()): Promise<Response> {
+		const deviceId = await DeviceFingerPrint.get();
 		const token = await this.createToken(deviceId);
-		headers.setHeader('Authorization', `Bearer ${token}`);
+		headers.setHeader('Authorization', `Bearer ${token.value}`);
 		return super.request(path, method, body, headers, cookies);
 	}
 
 	// Create token from credentials (username and password)
 	async createTokenFromCredentials(username: string, password: string, device: string = ''): Promise<JWTAuthToken> {
+		const deviceId = await DeviceFingerPrint.get();
 		const body: JWTAuthBodyProps = device === '' ? { username, password } : { username, password, device };
 		const response = await super.request('/wp-json/jwt-auth/v1/token', HttpMethod.POST, new JWTAuthBody(body), new JWTAuthHeaders(), new JWTAuthNoCookies());
 
@@ -100,7 +101,8 @@ export class HttpAuthenticatedClient extends HttpClient {
 	}
 
 	private async createToken(device: string): Promise<AuthToken> {
-		const token: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
+		const rawToken: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
+		const token = new AuthToken(rawToken);
 		if (!token || !token.isValid()) {
 			const token: RefreshToken = this.storageService.read(HttpAuthenticatedClient.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();
 			if (!token || !token.isValid()) {
