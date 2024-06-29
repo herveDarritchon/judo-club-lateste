@@ -4,17 +4,38 @@
 	import TelephoneNumberSVG from '$lib/components/svg/TelephoneNumberSVG.svelte';
 	import DateCalendarSVG from '$lib/components/svg/DateCalendarSVG.svelte';
 	import { _updateMemberData } from './+page';
+	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
 	export let data;
 	export let member: Membre = data.member.data;
-	console.log('Member from Edit Member +page.svelte:', member);
+
+	const toastStore = getToastStore();
 
 	let updatedMember = { ...member };
 
 	async function handleSubmit(event) {
 		event.preventDefault();
-		const updated = await _updateMemberData(member.id, updatedMember);
-		// Handle the response, e.g., show a success message or redirect
+		let t: ToastSettings;
+		try {
+			const updated = await _updateMemberData(member.id, updatedMember);
+			// Handle the response, e.g., show a success message or redirect
+			console.log('Updated member:', updated);
+			const updateData = updated.member.data;
+			t = {
+				message: 'Mise à jour réussie pour le compte du membre ' + updateData.subscription_name,
+				background: 'variant-filled-primary',
+				hideDismiss: true,
+				timeout: 3000
+			};
+		} catch (e) {
+			t = {
+				message: 'Erreur lors de la Mise à jour du compte du membre ' + updatedMember.subscription_name,
+				background: 'variant-filled-error',
+				hideDismiss: true,
+				timeout: 3000
+			};
+		}
+		toastStore.trigger(t);
 	}
 </script>
 

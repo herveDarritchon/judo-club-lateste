@@ -1,14 +1,18 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppBar, AppShell } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, Toast } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
+	import { initializeStores } from '@skeletonlabs/skeleton';
 
+	initializeStores();
 	console.log('Page:', $page);
 
 	export let data;
 
 	console.log('Data from layout:', data);
 </script>
+
+<Toast />
 
 <!-- App Shell -->
 <AppShell>
