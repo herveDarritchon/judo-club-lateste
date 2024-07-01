@@ -14,44 +14,183 @@
 	//Load remote data
 	export let members: Membre[] = [];
 
-	console.log("Members in MemberDatatable component:", members);
+	console.log('Members in MemberDatatable component:', members);
 
 	const handler = new DataHandler(members, { rowsPerPage: 5 });
 	const rows = handler.getRows();
+
+	function checkBoxWithDate(value: boolean, date: string) {
+		return value ? 'Oui le ' + date : 'Non';
+	}
+
+	function checkBox(value: boolean) {
+		return value ? 'Oui' : 'Non';
+	}
 
 	function createAndOpenPdf(row: Membre) {
 		const docDefinition = {
 			content: [
 				{
-					text: 'This is a header, using header style',
-					style: 'header'
+					text: [
+						{ text: 'Fiche de membre de ', style: 'header' },
+						{ text: row.subscription_name, style: 'header_label' }
+					], alignment: 'center', margin: [0, 90, 0, 80]
 				},
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam.\n\n',
 				{
-					text: 'Subheader 1 - using subheader style',
-					style: 'subheader'
+					columns: [
+						{
+							width: '33%',
+							text: [
+								{ text: 'Activité: ', style: 'label' },
+								{ text: row.activity, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Dojo: ', style: 'label' },
+								{ text: row.dojo, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Ceinture: ', style: 'label' },
+								{ text: row.judo_belt, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
 				},
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.',
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.',
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.\n\n',
 				{
-					text: 'Subheader 2 - using subheader style',
-					style: 'subheader'
+					columns: [
+						{
+							width: '33%',
+							text: [
+								{ text: 'Date de Naissance: ', style: 'label' },
+								{ text: row.birthday, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Lieu de Naissance: ', style: 'label' },
+								{ text: row.birth_place, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Genre: ', style: 'label' },
+								{ text: row.sex, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
 				},
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.',
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.\n\n',
 				{
-					text: 'It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties',
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Adresse: ', style: 'label' },
+								{ text: row.postal_address, style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Email: ', style: 'label' },
+								{ text: row.email_address, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Téléphone: ', style: 'label' },
+								{ text: row.telephone_number, style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Contacts: ', style: 'label' },
+								{ text: row.emergency_contacts, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					text: [
+
+						{ text: 'Commentaire:\n', style: 'label' },
+						{ text: row.comments, style: 'subheader' }
+					],   margin: [0, 25, 0, 25]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Paiement: ', style: 'label' },
+								{ text: checkBox(row.licence_fee_paid), style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Autorisation de pratique: ', style: 'label' },
+								{ text: checkBox(row.activity_authorization), style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Certificat médical: ', style: 'label' },
+								{ text: checkBox(row.medical_certificate), style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Extranet: ', style: 'label' },
+								{
+									text: checkBoxWithDate(row.extranet_validation_check, row.extranet_validation_date),
+									style: 'subheader'
+								}
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					text: [
+						{ text: 'Date de validation de la demande: ' },
+						{ text: row.extranet_validation_date }
+					],
 					style: ['quote', 'small']
 				}
 			],
 			styles: {
 				header: {
-					fontSize: 18,
+					fontSize: 16,
 					bold: true
 				},
+				header_label: {
+					fontSize: 18,
+					bold: false
+				},
 				subheader: {
-					fontSize: 15,
+					fontSize: 12,
+					bold: false
+				},
+				label: {
+					fontSize: 11,
 					bold: true
 				},
 				quote: {
@@ -64,8 +203,6 @@
 		};
 
 		pdfMake.createPdf(docDefinition).open();
-
-		return undefined;
 	}
 
 </script>
