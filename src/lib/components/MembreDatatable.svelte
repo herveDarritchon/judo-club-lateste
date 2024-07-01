@@ -19,6 +19,55 @@
 	const handler = new DataHandler(members, { rowsPerPage: 5 });
 	const rows = handler.getRows();
 
+	function createAndOpenPdf(row: Membre) {
+		const docDefinition = {
+			content: [
+				{
+					text: 'This is a header, using header style',
+					style: 'header'
+				},
+				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam.\n\n',
+				{
+					text: 'Subheader 1 - using subheader style',
+					style: 'subheader'
+				},
+				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.',
+				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.',
+				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.\n\n',
+				{
+					text: 'Subheader 2 - using subheader style',
+					style: 'subheader'
+				},
+				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.',
+				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Confectum ponit legam, perferendis nomine miserum, animi. Moveat nesciunt triari naturam posset, eveniunt specie deorsus efficiat sermone instituendarum fuisse veniat, eademque mutat debeo. Delectet plerique protervi diogenem dixerit logikh levius probabo adipiscuntur afficitur, factis magistra inprobitatem aliquo andriam obiecta, religionis, imitarentur studiis quam, clamat intereant vulgo admonitionem operis iudex stabilitas vacillare scriptum nixam, reperiri inveniri maestitiam istius eaque dissentias idcirco gravis, refert suscipiet recte sapiens oportet ipsam terentianus, perpauca sedatio aliena video.\n\n',
+				{
+					text: 'It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties',
+					style: ['quote', 'small']
+				}
+			],
+			styles: {
+				header: {
+					fontSize: 18,
+					bold: true
+				},
+				subheader: {
+					fontSize: 15,
+					bold: true
+				},
+				quote: {
+					italics: true
+				},
+				small: {
+					fontSize: 8
+				}
+			}
+		};
+
+		pdfMake.createPdf(docDefinition).open();
+
+		return undefined;
+	}
+
 </script>
 
 <div class=" overflow-x-auto space-y-4">
@@ -96,11 +145,13 @@
 						Editer pour modification l'inscription de {row.subscription_name}.
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
-					<a type="button" class="btn-icon btn-icon-sm variant-filled"
-						 data-tooltip-target="tooltip-pdf-{row.id}"
-						 href="/membres/{row.id}/pdf" data-tooltip-placement="left">
+					<button
+						type="button"
+						class="btn-icon btn-icon-sm variant-filled"
+						on:click={() => createAndOpenPdf(row)}
+						data-tooltip-target="tooltip-pdf-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-file-pdf"></i>
-					</a>
+					</button>
 					<div id="tooltip-pdf-{row.id}" role="tooltip"
 							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
 						Générer le pdf pour imprimer l'inscription de {row.subscription_name}.

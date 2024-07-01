@@ -59,6 +59,7 @@
 		"flowbite": "^2.3.0",
 		"flowbite-svelte": "^0.46.1",
 		"jwt-decode": "^4.0.0",
+		"pdfmake": "^0.2.10",
 		"tailwind-merge": "^2.3.0"
 	}
 }
