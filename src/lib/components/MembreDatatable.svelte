@@ -10,6 +10,7 @@
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Membre } from '$lib/data/models/Membre';
+	import type { Readable } from 'node:stream';
 
 	//Load remote data
 	export let members: Membre[] = [];
@@ -18,6 +19,9 @@
 
 	const handler = new DataHandler(members, { rowsPerPage: 5 });
 	const rows = handler.getRows();
+
+	const selected = handler.getSelected();
+	const isAllSelected = handler.isAllSelected();
 
 	function checkBoxWithDate(value: boolean, date: string) {
 		return value ? 'Oui le ' + date : 'Non';
@@ -127,7 +131,7 @@
 
 						{ text: 'Commentaire:\n', style: 'label' },
 						{ text: row.comments, style: 'subheader' }
-					],   margin: [0, 25, 0, 25]
+					], margin: [0, 25, 0, 25]
 				},
 				{
 					columns: [
@@ -205,33 +209,72 @@
 		pdfMake.createPdf(docDefinition).open();
 	}
 
+	$: console.log('Selected:', selected);
+	$: console.log('Selected Rows:', $selected);
+	$: console.log('Rows:', rows);
+	$: console.log('$Rows:', $rows);
+	$: console.log('Row Handler:', handler);
+
+	function memoriseMemberEmails(selected: (Membre[keyof Membre] | Membre)[], rows: Membre[]) {
+		const emails = selected.map((member) => {
+			const foundMember = rows.find((row) => row.id === member);
+			if (foundMember) return foundMember.email_address;
+		}).join(';');
+		console.log('Emails:', emails);
+		// Copy the text inside the text field
+		navigator.clipboard.writeText(emails);
+	}
+
 </script>
 
 <div class=" overflow-x-auto space-y-4">
 	<!-- Header -->
 	<header class="flex justify-between gap-4">
 		<Search {handler} />
+		<button
+			type="button"
+			class="btn variant-filled"
+			on:click={() => memoriseMemberEmails($selected, members)}
+			data-tooltip-target="tooltip-memorize-emails" data-tooltip-placement="top"
+			disabled={$selected.length===0}>
+			<span><i class="fa-solid fa-clipboard"></i></span>
+			<span>Copy Adresses Email</span>
+		</button>
+		<div id="tooltip-memorize-emails" role="tooltip"
+				 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+			Sauvegarde tous les emails des membres sélectionnés.
+			<div class="tooltip-arrow" data-popper-arrow></div>
+		</div>
 		<RowsPerPage {handler} />
 	</header>
 	<!-- Table -->
 	<table class="table table-hover table-compact w-full table-auto">
 		<thead>
 		<tr>
+			<th>Sélection</th>
 			<ThSort {handler} orderBy="licence_renewal_type">Mode</ThSort>
 			<ThSort {handler} orderBy="subscription_name">Nom</ThSort>
 			<ThSort {handler} orderBy="activity">Activité</ThSort>
 			<ThSort {handler} orderBy="dojo">Dojo</ThSort>
 			<ThSort {handler} orderBy="birthday">Date de naissance</ThSort>
+			<ThSort {handler} orderBy="category">Catégorie</ThSort>
 			<ThSort {handler} orderBy="telephone_number">Téléphone</ThSort>
 			<ThSort {handler} orderBy="email_address">Email</ThSort>
 			<td>Actions</td>
 		</tr>
 		<tr>
+			<th>
+				<input type="checkbox"
+							 on:click={() => handler.selectAll({ selectBy: 'id' })}
+							 checked={$isAllSelected}
+				/>
+			</th>
 			<ThFilter {handler} filterBy="licence_renewal_type" />
 			<ThFilter {handler} filterBy="subscription_name" />
 			<ThFilter {handler} filterBy="activity" />
 			<ThFilter {handler} filterBy="dojo" />
 			<ThFilter {handler} filterBy="birthday" />
+			<ThFilter {handler} filterBy="category" />
 			<ThFilter {handler} filterBy="telephone_number" />
 			<ThFilter {handler} filterBy="email_address" />
 			<td></td>
@@ -240,6 +283,12 @@
 		<tbody>
 		{#each $rows as row}
 			<tr>
+				<td>
+					<input type="checkbox"
+								 on:click={() => handler.select(row.id)}
+								 checked={$selected.includes(row.id)}
+					/>
+				</td>
 				<td>
 					<button type="button" class="btn-icon btn-icon-sm variant-filled"
 									data-tooltip-target="tooltip-renewal-{row.id}">
@@ -259,6 +308,7 @@
 				<td>{row.activity}</td>
 				<td>{row.dojo}</td>
 				<td>{row.birthday}</td>
+				<td>{row.category}</td>
 				<td>{row.telephone_number}</td>
 				<td>{row.email_address}</td>
 				<td class="row-auto">

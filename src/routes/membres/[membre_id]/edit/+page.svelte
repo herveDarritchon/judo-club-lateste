@@ -125,6 +125,22 @@
 			</div>
 
 			<div class="mb-4">
+				<label class="block text-gray-300 text-sm font-bold mb-2" for="category">Catégorie</label>
+				<select id="category" bind:value={updatedMember.category}
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+					<option value="Sans">Sans</option>
+					<option value="baby-judo">Baby-judo</option>
+					<option value="mini-poussin">Mini-poussin</option>
+					<option value="poussins">Poussins</option>
+					<option value="benjamins">Benjamins</option>
+					<option value="minimes">Minimes</option>
+					<option value="cadets">Cadets</option>
+					<option value="juniors">Juniors</option>
+					<option value="seniors">Séniors</option>
+				</select>
+			</div>
+
+			<div class="mb-4">
 				<label class="block text-gray-300 text-sm font-bold mb-2" for="postal_address">Adresse Postale</label>
 				<input type="text" id="postal_address" bind:value={updatedMember.postal_address}
 							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

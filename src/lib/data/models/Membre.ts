@@ -25,4 +25,5 @@ export interface Membre extends Row {
 	dojo: string;
 	annee_saison: string;
 	categorie: string;
+	selected: boolean;
 }
