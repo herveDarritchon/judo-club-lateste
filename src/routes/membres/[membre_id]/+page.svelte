@@ -1,9 +1,7 @@
 <script lang="ts">
-	import type { Membre } from '$lib/data/models/Membre';
 
 	export let data;
 
-	console.log ("data dans display", data);
 </script>
 
 <div class="space-y-10">

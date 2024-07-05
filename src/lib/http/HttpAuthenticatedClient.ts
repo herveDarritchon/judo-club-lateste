@@ -3,7 +3,7 @@ import { HttpClient } from '$lib/http/HttpClient';
 import { JWTAuthBody, type JWTAuthBodyProps } from '$lib/security/body/JWTAuthBody';
 import { JWTAuthCookies, JWTAuthNoCookies } from '$lib/security/cookie/JWTAuthCookie';
 import { AuthToken, InvalidAuthToken, JWTAuthToken } from '$lib/security/authToken/JWTAuthToken';
-import { InvalidRefreshToken, RefreshToken, type RefreshTokenProps } from '$lib/security/refreshToken/JWTRefreshToken';
+import { InvalidRefreshToken, RefreshToken } from '$lib/security/refreshToken/JWTRefreshToken';
 import { JWTAuthResponse } from '$lib/security/JWTAuthResponse';
 import { HttpMethod } from '$lib/http/HttpMethod';
 import { StorageService } from '$lib/storage/StorageService';
@@ -18,6 +18,7 @@ export class HttpAuthenticatedClient extends HttpClient {
 	private readonly AUTH_TOKEN_KEY = 'auth_token';
 	public static readonly REFRESH_TOKEN_KEY = 'refresh_token';
 	private readonly storageService: StorageService;
+	private readonly deviceFingerPrint: DeviceFingerPrint;
 
 	/**
 	 * Constructor to create an HttpClient instance
@@ -28,6 +29,7 @@ export class HttpAuthenticatedClient extends HttpClient {
 	constructor(serverBaseUrl: string, storageService: StorageService = new StorageService(localStorage), fetcher: (input: RequestInfo, init?: RequestInit) => Promise<Response> = fetch) {
 		super(serverBaseUrl, fetcher);
 		this.storageService = storageService;
+		this.deviceFingerPrint =  new DeviceFingerPrint(this.storageService);
 	}
 
 	/**
@@ -41,16 +43,30 @@ export class HttpAuthenticatedClient extends HttpClient {
 	 * @public
 	 */
 	async request<T>(path: string, method: string, body?: T, headers: JWTAuthHeaders = new JWTAuthHeaders(), cookies: JWTAuthCookies = new JWTAuthNoCookies()): Promise<Response> {
-		const deviceId = await DeviceFingerPrint.get();
+		const deviceId = await this.deviceFingerPrint.get();
 		const token = await this.createToken(deviceId);
 		headers.setHeader('Authorization', `Bearer ${token.value}`);
-		return super.request(path, method, body, headers, cookies);
+		const response = await super.request(path, method, body, headers, cookies);
+		if (response.status === 401) {
+			const jwtAuthToken = await this.createTokenFromRefreshToken(deviceId);
+			headers.setHeader('Authorization', `Bearer ${jwtAuthToken.authToken.value}`);
+			return await super.request(path, method, body, headers, cookies);
+		}
+		return response;
 	}
 
 	// Create token from credentials (username and password)
+	/**
+	 * Method to create a JWT token from credentials (username and password)
+	 * @param username - The username of the user
+	 * @param password - The password of the user
+	 * @param device
+	 * @returns Promise<JWTAuthToken> - The JWT token as a promise
+	 * @public
+	 * @async
+	 */
 	async createTokenFromCredentials(username: string, password: string, device: string = ''): Promise<JWTAuthToken> {
-		const deviceId = await DeviceFingerPrint.get();
-		const body: JWTAuthBodyProps = device === '' ? { username, password } : { username, password, device };
+		const body: JWTAuthBodyProps = device === '' ? { username, password, device: await this.deviceFingerPrint.get() } : { username, password, device };
 		const response = await super.request('/wp-json/jwt-auth/v1/token', HttpMethod.POST, new JWTAuthBody(body), new JWTAuthHeaders(), new JWTAuthNoCookies());
 
 		// Check for refresh_token in the response cookies
@@ -67,15 +83,22 @@ export class HttpAuthenticatedClient extends HttpClient {
 	}
 
 	// Create token from refresh token
-	protected async createTokenFromRefreshToken(device: string = ''): Promise<JWTAuthToken> {
-		const body: JWTAuthBodyProps = device === '' ? {} : { device };
-		const refreshTokenProps: RefreshTokenProps = this.storageService.read(HttpAuthenticatedClient.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();
-		const refreshToken = new RefreshToken(refreshTokenProps);
-		if (!refreshToken || !refreshToken.isValid()) {
-			throw new Error('No refresh token found');
-		}
-		const cookies = new JWTAuthCookies(HttpAuthenticatedClient.REFRESH_TOKEN_KEY, refreshToken.value);
-		const response = await super.request('/wp-json/jwt-auth/v1/token', HttpMethod.POST, new JWTAuthBody(body), new JWTAuthHeaders(), cookies);
+	/**
+	 * Method to create a JWT token from a refresh token
+	 * @returns Promise<JWTAuthToken> - The JWT token as a promise
+	 * @public
+	 * @async
+	 * @param deviceId
+	 */
+	protected async createTokenFromRefreshToken(deviceId: string = ''): Promise<JWTAuthToken> {
+		const body: JWTAuthBodyProps = deviceId === '' ? {} : { device: deviceId };
+		/*		const refreshTokenProps: RefreshTokenProps = this.storageService.read(HttpAuthenticatedClient.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();
+				const refreshToken = new RefreshToken(refreshTokenProps);
+				if (!refreshToken || !refreshToken.isValid()) {
+					throw new Error('No refresh token found');
+				}
+				const cookies = new JWTAuthCookies(HttpAuthenticatedClient.REFRESH_TOKEN_KEY, refreshToken.value);*/
+		const response = await super.request('/wp-json/jwt-auth/v1/token', HttpMethod.POST, new JWTAuthBody(body), new JWTAuthHeaders(), new JWTAuthNoCookies());
 
 		const data = await response.json();
 		const jwtAuthToken = new JWTAuthToken(new JWTAuthResponse(data));
@@ -84,6 +107,13 @@ export class HttpAuthenticatedClient extends HttpClient {
 	}
 
 	// Validate token
+	/**
+	 * Method to validate a JWT token
+	 * @param token - The JWT token to validate
+	 * @returns Promise<boolean> - The validation result as a promise
+	 * @public
+	 * @async
+	 */
 	async validateToken(token: string): Promise<boolean> {
 		const headers = { 'Authorization': `Bearer ${token}` };
 		let response;
@@ -100,6 +130,11 @@ export class HttpAuthenticatedClient extends HttpClient {
 		return jwtAuthToken.isValid();
 	}
 
+	/**
+	 * Method to create a token with a device
+	 * @param device
+	 * @private
+	 */
 	private async createToken(device: string): Promise<AuthToken> {
 		const rawToken: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
 		const token = new AuthToken(rawToken);

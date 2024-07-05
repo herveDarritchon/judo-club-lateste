@@ -13,8 +13,6 @@
 	//Load remote data
 	export let data;
 
-	console.log('Data', data);
-
 	//Init data handler - CLIENT
 	const handler = new DataHandler(data.data, { rowsPerPage: 5 });
 	const rows = handler.getRows();

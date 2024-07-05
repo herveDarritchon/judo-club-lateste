@@ -5,10 +5,7 @@
 
 	export let data: { user: User, members: Membre[] };
 
-	console.log('Data from Member +page.svelte:', data);
-
 	const members: Membre[] = data.members;
-	console.log('Members from Member +page.svelte:', members);
 
 </script>
 

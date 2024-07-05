@@ -10,12 +10,9 @@
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Membre } from '$lib/data/models/Membre';
-	import type { Readable } from 'node:stream';
 
 	//Load remote data
 	export let members: Membre[] = [];
-
-	console.log('Members in MemberDatatable component:', members);
 
 	const handler = new DataHandler(members, { rowsPerPage: 5 });
 	const rows = handler.getRows();
@@ -209,19 +206,11 @@
 		pdfMake.createPdf(docDefinition).open();
 	}
 
-	$: console.log('Selected:', selected);
-	$: console.log('Selected Rows:', $selected);
-	$: console.log('Rows:', rows);
-	$: console.log('$Rows:', $rows);
-	$: console.log('Row Handler:', handler);
-
 	function memoriseMemberEmails(selected: (Membre[keyof Membre] | Membre)[], rows: Membre[]) {
 		const emails = selected.map((member) => {
 			const foundMember = rows.find((row) => row.id === member);
 			if (foundMember) return foundMember.email_address;
 		}).join(';');
-		console.log('Emails:', emails);
-		// Copy the text inside the text field
 		navigator.clipboard.writeText(emails);
 	}
 

@@ -9,9 +9,7 @@ import { Fingerprint } from '$lib/security/fingerPrint/FingerPrint';
  */
 export class DeviceFingerPrint {
 	private readonly DEVICE_ID_KEY = 'device_id';
-	private deviceId: string = '';
 	private storageService: StorageService;
-	private static deviceId: Promise<string>;
 
 	/**
 	 * Constructor
@@ -27,22 +25,15 @@ export class DeviceFingerPrint {
 	 * @returns The device fingerprint
 	 * @public
 	 */
-	static async get(): Promise<string> {
-		if (!DeviceFingerPrint.deviceId) {
-			DeviceFingerPrint.deviceId = Fingerprint.generate();
-			/*			this.deviceId = this.storageService.read(this.DEVICE_ID_KEY) || this.generate();
-						this.storageService.save(this.DEVICE_ID_KEY, this.deviceId);*/
-		}
-		return DeviceFingerPrint.deviceId;
-	}
+	 async get(): Promise<string> {
 
-	/**
-	 * Generate a new device fingerprint
-	 * @returns The generated device fingerprint
-	 * @private
-	 */
-	private generate(): string {
-		return crypto.randomUUID();
+		let deviceId: string | null = await this.storageService.read(this.DEVICE_ID_KEY);
+
+		if (!deviceId) {
+			deviceId = await Fingerprint.generate();
+			this.storageService.save(this.DEVICE_ID_KEY, deviceId);
+		}
+		return deviceId;
 	}
 
 }

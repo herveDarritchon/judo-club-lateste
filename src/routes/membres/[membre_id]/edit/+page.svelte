@@ -19,7 +19,6 @@
 		try {
 			const updated = await _updateMemberData(member.id, updatedMember);
 			// Handle the response, e.g., show a success message or redirect
-			console.log('Updated member:', updated);
 			const updateData = updated.member.data;
 			t = {
 				message: 'Mise à jour réussie pour le compte du membre ' + updateData.subscription_name,
@@ -27,9 +26,11 @@
 				hideDismiss: true,
 				timeout: 3000
 			};
-		} catch (e) {
+		} catch (e: any) {
+			const errorMessage = 'Erreur lors de la Mise à jour du compte du membre ' + updatedMember.subscription_name;
+			console.log(errorMessage, e)
 			t = {
-				message: 'Erreur lors de la Mise à jour du compte du membre ' + updatedMember.subscription_name,
+				message: errorMessage,
 				background: 'variant-filled-error',
 				hideDismiss: true,
 				timeout: 3000

@@ -5,7 +5,6 @@
 	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
 
 	export let data;
-	console.log('Data from +page.svelte:', data);
 
 	const { form, errors, message, constraints, enhance } = superForm(
 		data.form,

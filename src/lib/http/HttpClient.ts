@@ -40,12 +40,6 @@ export class HttpClient {
 	 * @public
 	 */
 	async request<T>(path: string, method: string, body: T, headers: JWTAuthHeaders, cookies: JWTAuthCookies): Promise<Response> {
-		console.log('path', path);
-		console.log('method', method);
-		console.log('body', body);
-		console.log('headers', headers);
-		console.log('cookies', cookies);
-
 		const response = await this.fetcher(`${this.serverBaseUrl}${path}`, {
 			method: method,
 			credentials: 'include', // Inclure les cookies pour les requêtes cross-origin
@@ -56,8 +50,11 @@ export class HttpClient {
 			body: JSON.stringify(body)
 		});
 		if (!response.ok) {
-			const data = await response.json();
-			throw new Error(data.message || 'Request failed');
+			const error = await response.json();
+			if (error.data.status === 401) {
+				return response;
+			}
+			throw new Error(error.message || 'Request failed');
 		}
 		return response;
 	}
