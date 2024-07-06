@@ -10,15 +10,18 @@
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Inscription } from '$lib/data/models/Inscription';
-	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { getToastStore, type ModalSettings, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
 	import { StorageService } from '$lib/storage/StorageService';
 	import { HttpMethod } from '$lib/http/HttpMethod';
 	import { destroy } from '../../routes/inscriptions/store';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 
 	//Load remote data
 	export let subscriptions: Inscription[] = [];
 	let tableElement;
+
+	const modalStore = getModalStore();
 
 	const handler = new DataHandler(subscriptions, { rowsPerPage: 10 });
 
@@ -50,6 +53,21 @@
 
 	function checkBox(value: boolean) {
 		return value ? 'Oui' : 'Non';
+	}
+
+	function confirmDelete(subscriptionId: number, subscription: Inscription) {
+		const modal: ModalSettings = {
+			type: 'confirm',
+			// Data
+			title: 'Confirmation',
+			body: `Est ce que vous voulez supprimer l'inscription de ${subscription.subscription_name} ?`,
+			response: (r: boolean) => {
+				if (r) {
+					_deleteSubscriptionBy(subscriptionId, subscription);
+				}
+			}
+		};
+		modalStore.trigger(modal);
 	}
 
 	async function _deleteSubscriptionBy(subscriptionId: number, subscription: Inscription) {
@@ -340,7 +358,7 @@
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
 					<button type="button" class="btn-icon btn-icon-sm variant-filled"
-									on:click="{_deleteSubscriptionBy(row.id, row)}"
+									on:click="{() => confirmDelete(row.id, row)}"
 									data-tooltip-target="tooltip-delete-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-trash"></i>
 					</button>

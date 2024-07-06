@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppBar, AppShell, Toast } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, Modal, Toast } from '@skeletonlabs/skeleton';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 
 	initializeStores();
@@ -10,6 +10,7 @@
 </script>
 
 <Toast />
+<Modal />
 
 <!-- App Shell -->
 <AppShell>
