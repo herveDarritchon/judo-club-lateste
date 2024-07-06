@@ -1,16 +1,20 @@
-import { error } from '@sveltejs/kit';
+import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
+import { StorageService } from '$lib/storage/StorageService';
+import { HttpMethod } from '$lib/http/HttpMethod';
 
 export async function load({ params, fetch }) {
-	const response = await fetch('http://localhost:8888/judolateste/wp-json/associationManagement/v1/subscriptions/' + params.inscription_id);
-
-	if (response.status >= 400) {
-		throw error(response.status, response.statusText);
+	const subscriptionId = params.inscription_id;
+	let subscription;
+	try {
+		const response = await new HttpAuthenticatedClient('http://localhost:8888/judolateste', new StorageService(localStorage), fetch)
+			.request('/wp-json/associationManagement/v1/subscriptions/' + subscriptionId, HttpMethod.GET);
+		subscription = await response.json();
+	} catch (error: any) {
+		const message = `Erreur de récupération des infos de l'inscription ${subscriptionId} avec comme cause ${error.message}`;
+		console.error(message, error);
+		throw new Error(message);
 	}
-
-	const data = await response.json();
-
 	return {
-		data,
-		inscription: data.data
+		subscription
 	};
 }

@@ -10,7 +10,7 @@ export async function load({ params, fetch }) {
 			.request('/wp-json/associationManagement/v1/members/' + membreId, HttpMethod.GET);
 		member = await response.json();
 	} catch (error: any) {
-		const message = `Erreur de récupération des infos du Current User ${membreId} avec comme cause ${error.message}`;
+		const message = `Erreur de récupération des infos du membre ${membreId} avec comme cause ${error.message}`;
 		console.warn(message, error);
 		throw new Error(message);
 	}

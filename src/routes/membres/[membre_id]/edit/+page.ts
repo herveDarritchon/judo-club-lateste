@@ -10,7 +10,7 @@ export async function _updateMemberData(memberId: number, updatedMember: Membre)
 			.request('/wp-json/associationManagement/v1/members/' + memberId, HttpMethod.PUT, updatedMember);
 		member = await response.json();
 	} catch (error: any) {
-		const message = `Erreur de la mise à jour des infos du User ${memberId} avec comme cause ${error.message}`;
+		const message = `Erreur de la mise à jour des infos du membre ${memberId} avec comme cause ${error.message}`;
 		console.warn(message, error);
 		throw new Error(message);
 	}

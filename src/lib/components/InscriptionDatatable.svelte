@@ -9,18 +9,247 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
+	import type { Inscription } from '$lib/data/models/Inscription';
+	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
+	import { StorageService } from '$lib/storage/StorageService';
+	import { HttpMethod } from '$lib/http/HttpMethod';
+	import { destroy } from '../../routes/inscriptions/store';
 
 	//Load remote data
-	export let data;
+	export let subscriptions: Inscription[] = [];
+	let tableElement;
 
-	//Init data handler - CLIENT
-	const handler = new DataHandler(data.data, { rowsPerPage: 5 });
+	const handler = new DataHandler(subscriptions, { rowsPerPage: 10 });
+
+	$: subscriptions, handler.setRows(subscriptions);
+	$: subscriptions, update();
+
+	const update = () => {
+		if (tableElement) {
+			const scrollTopValue = tableElement?.parentNode?.scrollTop;
+			handler.setRows(subscriptions);
+			setTimeout(() => {
+				if (tableElement?.parentNode != null) {
+					console.log('scrollTopValue', scrollTopValue);
+					tableElement.parentNode.scrollTop = scrollTopValue;
+				}
+			}, 20);
+		}
+	};
+
 	const rows = handler.getRows();
 
-	function handleDelete(id: string): boolean {
-		console.log('Delete', id);
-		return true;
+	const toastStore = getToastStore();
+	const selected = handler.getSelected();
+	const isAllSelected = handler.isAllSelected();
+
+	function checkBoxWithDate(value: boolean, date: string) {
+		return value ? 'Oui le ' + date : 'Non';
 	}
+
+	function checkBox(value: boolean) {
+		return value ? 'Oui' : 'Non';
+	}
+
+	async function _deleteSubscriptionBy(subscriptionId: number, subscription: Inscription) {
+		let t: ToastSettings;
+		try {
+			await new HttpAuthenticatedClient('http://localhost:8888/judolateste', new StorageService(localStorage), fetch)
+				.request('/wp-json/associationManagement/v1/subscriptions/' + subscriptionId, HttpMethod.DELETE);
+			t = {
+				message: 'Suppression réussie de l\'inscription de ' + subscription.subscription_name,
+				background: 'variant-filled-primary',
+				hideDismiss: true,
+				timeout: 3000
+			};
+			toastStore.trigger(t);
+			destroy(subscription);
+		} catch (error: any) {
+			const message = `Erreur lors de la suppression de l'inscription ${subscriptionId} avec comme cause ${error.message}`;
+			console.error(message, error);
+			throw new Error(message);
+		}
+	}
+
+	function createAndOpenPdf(row: Inscription) {
+		const docDefinition = {
+			content: [
+				{
+					text: [
+						{ text: 'Fiche de membre de ', style: 'header' },
+						{ text: row.subscription_name, style: 'header_label' }
+					], alignment: 'center', margin: [0, 90, 0, 80]
+				},
+				{
+					columns: [
+						{
+							width: '33%',
+							text: [
+								{ text: 'Activité: ', style: 'label' },
+								{ text: row.activity, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Dojo: ', style: 'label' },
+								{ text: row.dojo, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Ceinture: ', style: 'label' },
+								{ text: row.judo_belt, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					columns: [
+						{
+							width: '33%',
+							text: [
+								{ text: 'Date de Naissance: ', style: 'label' },
+								{ text: row.birthday, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Lieu de Naissance: ', style: 'label' },
+								{ text: row.birth_place, style: 'subheader' }
+							]
+						},
+						{
+							width: '33%',
+							text: [
+								{ text: 'Genre: ', style: 'label' },
+								{ text: row.sex, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Adresse: ', style: 'label' },
+								{ text: row.postal_address, style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Email: ', style: 'label' },
+								{ text: row.email_address, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Téléphone: ', style: 'label' },
+								{ text: row.telephone_number, style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Contacts: ', style: 'label' },
+								{ text: row.emergency_contacts, style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					text: [
+
+						{ text: 'Commentaire:\n', style: 'label' },
+						{ text: row.comments, style: 'subheader' }
+					], margin: [0, 25, 0, 25]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Paiement: ', style: 'label' },
+								{ text: checkBox(row.licence_fee_paid), style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Autorisation de pratique: ', style: 'label' },
+								{ text: checkBox(row.activity_authorization), style: 'subheader' }
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					columns: [
+						{
+							width: '50%',
+							text: [
+								{ text: 'Certificat médical: ', style: 'label' },
+								{ text: checkBox(row.medical_certificate), style: 'subheader' }
+							]
+						},
+						{
+							width: '50%',
+							text: [
+								{ text: 'Extranet: ', style: 'label' },
+								{
+									text: checkBoxWithDate(row.extranet_validation_check, row.extranet_validation_date),
+									style: 'subheader'
+								}
+							]
+						}
+					], margin: [0, 20, 0, 20]
+				},
+				{
+					text: [
+						{ text: 'Date de validation de la demande: ' },
+						{ text: row.extranet_validation_date }
+					],
+					style: ['quote', 'small']
+				}
+			],
+			styles: {
+				header: {
+					fontSize: 16,
+					bold: true
+				},
+				header_label: {
+					fontSize: 18,
+					bold: false
+				},
+				subheader: {
+					fontSize: 12,
+					bold: false
+				},
+				label: {
+					fontSize: 11,
+					bold: true
+				},
+				quote: {
+					italics: true
+				},
+				small: {
+					fontSize: 8
+				}
+			}
+		};
+
+		pdfMake.createPdf(docDefinition).open();
+	}
+
 </script>
 
 <div class=" overflow-x-auto space-y-4">
@@ -30,7 +259,7 @@
 		<RowsPerPage {handler} />
 	</header>
 	<!-- Table -->
-	<table class="table table-hover table-compact w-full table-auto">
+	<table class="table table-hover table-compact w-full table-auto" bind:this={tableElement}>
 		<thead>
 		<tr>
 			<ThSort {handler} orderBy="licence_renewal_type">Mode</ThSort>
@@ -80,7 +309,7 @@
 				<td class="row-auto">
 					<a type="button" class="btn-icon btn-icon-sm variant-filled"
 						 href="/inscriptions/{row.id}/display"
-									data-tooltip-target="tooltip-display-{row.id}" data-tooltip-placement="left">
+						 data-tooltip-target="tooltip-display-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-display"></i>
 					</a>
 					<div id="tooltip-display-{row.id}" role="tooltip"
@@ -90,7 +319,7 @@
 					</div>
 					<a type="button" class="btn-icon btn-icon-sm variant-filled"
 						 href="/inscriptions/{row.id}/edit"
-									data-tooltip-target="tooltip-edit-{row.id}" data-tooltip-placement="left">
+						 data-tooltip-target="tooltip-edit-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-pen-to-square"></i>
 					</a>
 					<div id="tooltip-edit-{row.id}" role="tooltip"
@@ -98,18 +327,20 @@
 						Editer pour modification l'inscription de {row.subscription_name}.
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
-					<a type="button" class="btn-icon btn-icon-sm variant-filled"
-						 href="/inscriptions/{row.id}/pdf"
-						 data-tooltip-target="tooltip-pdf-{row.id}" data-tooltip-placement="left">
+					<button
+						type="button"
+						class="btn-icon btn-icon-sm variant-filled"
+						on:click={() => createAndOpenPdf(row)}
+						data-tooltip-target="tooltip-pdf-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-file-pdf"></i>
-					</a>
+					</button>
 					<div id="tooltip-pdf-{row.id}" role="tooltip"
 							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
 						Générer le pdf pour imprimer l'inscription de {row.subscription_name}.
 						<div class="tooltip-arrow" data-popper-arrow></div>
 					</div>
 					<button type="button" class="btn-icon btn-icon-sm variant-filled"
-									on:click="{handleDelete(row.id)}"
+									on:click="{_deleteSubscriptionBy(row.id, row)}"
 									data-tooltip-target="tooltip-delete-{row.id}" data-tooltip-placement="left">
 						<i class="fa-solid fa-trash"></i>
 					</button>

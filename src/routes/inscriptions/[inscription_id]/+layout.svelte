@@ -2,13 +2,13 @@
 	import type { Inscription } from '$lib/data/models/Inscription';
 
 	export let data;
-	export let inscription: Inscription = data;
+	export let inscription: Inscription = data.subscription;
 	</script>
 
 <slot/>
 <a type="button" class="btn-icon btn-icon-sm variant-filled"
 	 data-tooltip-target="tooltip-back-{inscription.id}"
-	 href="/membres" data-tooltip-placement="top">
+	 href="/inscriptions" data-tooltip-placement="top">
 	<i class="fa-solid fa-arrow-left"></i>
 </a>
 <div id="tooltip-back-{inscription.id}" role="tooltip"

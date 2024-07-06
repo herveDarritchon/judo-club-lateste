@@ -28,7 +28,7 @@
 			};
 		} catch (e: any) {
 			const errorMessage = 'Erreur lors de la Mise à jour du compte du membre ' + updatedMember.subscription_name;
-			console.log(errorMessage, e)
+			console.error(errorMessage, e)
 			t = {
 				message: errorMessage,
 				background: 'variant-filled-error',

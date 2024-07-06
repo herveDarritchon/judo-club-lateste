@@ -2,7 +2,7 @@
 	import type { Membre } from '$lib/data/models/Membre';
 
 	export let data;
-	export let membre: Membre = data;
+	export let membre: Membre = data.member;
 	</script>
 
 <slot/>

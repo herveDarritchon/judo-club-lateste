@@ -1,7 +1,13 @@
 <script lang="ts">
 	import InscriptionDatatable from '$lib/components/InscriptionDatatable.svelte';
+	import type { User } from '$lib/models/User';
+	import type { Inscription } from '$lib/data/models/Inscription';
+	import { subscriptions } from './store';
 
-	export let data;
+	export let data: { user: User, subscriptions: Inscription[] };
+
+	$subscriptions = data.subscriptions;
+
 </script>
 
 <div class="space-y-10">
@@ -13,5 +19,5 @@
 	<!-- Divider -->
 	<hr />
 	<!-- Component -->
-	<InscriptionDatatable {data} />
+	<InscriptionDatatable subscriptions={$subscriptions} />
 </div>
