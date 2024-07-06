@@ -10,11 +10,12 @@
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Membre } from '$lib/data/models/Membre';
+	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
 	//Load remote data
 	export let members: Membre[] = [];
 
-	const handler = new DataHandler(members, { rowsPerPage: 5 });
+	const handler = new DataHandler(members, { rowsPerPage: 10 });
 	const rows = handler.getRows();
 
 	const selected = handler.getSelected();
@@ -214,26 +215,34 @@
 		navigator.clipboard.writeText(emails);
 	}
 
+	const popupHover: PopupSettings = {
+		event: 'hover',
+		target: 'popupHover',
+		placement: 'top'
+	};
 </script>
 
 <div class=" overflow-x-auto space-y-4">
 	<!-- Header -->
 	<header class="flex justify-between gap-4">
 		<Search {handler} />
-		<button
-			type="button"
-			class="btn variant-filled"
-			on:click={() => memoriseMemberEmails($selected, members)}
-			data-tooltip-target="tooltip-memorize-emails" data-tooltip-placement="top"
-			disabled={$selected.length===0}>
+
+		<button type="button"
+						on:click={() => memoriseMemberEmails($selected, members)}
+						class="btn variant-filled [&>*]:pointer-events-none" use:popup={popupHover}
+						disabled={$selected.length===0} >
 			<span><i class="fa-solid fa-clipboard"></i></span>
 			<span>Copy Adresses Email</span>
 		</button>
-		<div id="tooltip-memorize-emails" role="tooltip"
-				 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-			Sauvegarde tous les emails des membres sélectionnés.
-			<div class="tooltip-arrow" data-popper-arrow></div>
+		<div class="card p-4 variant-filled-surface" data-popup="popupHover">
+			{#if $selected.length===0}
+				Sélectionnez des membres pour copier leurs adresses email
+			{:else}
+				Copier tous les emails des membres sélectionnés dans le presse-papier
+			{/if}
+			<div class="arrow variant-filled-secondary" />
 		</div>
+
 		<RowsPerPage {handler} />
 	</header>
 	<!-- Table -->

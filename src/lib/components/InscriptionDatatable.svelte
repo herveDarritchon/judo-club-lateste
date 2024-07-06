@@ -10,12 +10,18 @@
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Inscription } from '$lib/data/models/Inscription';
-	import { getToastStore, type ModalSettings, type ToastSettings } from '@skeletonlabs/skeleton';
+	import {
+		getModalStore,
+		getToastStore,
+		type ModalSettings,
+		popup,
+		type PopupSettings,
+		type ToastSettings
+	} from '@skeletonlabs/skeleton';
 	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
 	import { StorageService } from '$lib/storage/StorageService';
 	import { HttpMethod } from '$lib/http/HttpMethod';
 	import { destroy } from '../../routes/inscriptions/store';
-	import { getModalStore } from '@skeletonlabs/skeleton';
 
 	//Load remote data
 	export let subscriptions: Inscription[] = [];
@@ -304,18 +310,18 @@
 		{#each $rows as row}
 			<tr>
 				<td>
-					<button type="button" class="btn-icon btn-icon-sm variant-filled"
-									data-tooltip-target="tooltip-renewal-{row.id}">
+					<button type="button"
+									class="btn variant-filled [&>*]:pointer-events-none"
+									use:popup={{ event: 'hover', target: 'renewal-' + row.id, placement: 'top' }}>
 						{#if row.licence_renewal_type === 'Première'}
 							<i class="fa-solid fa-person-walking-arrow-right"></i>
 						{:else}
 							<i class="fa fa-refresh" aria-hidden="true"></i>
 						{/if}
 					</button>
-					<div id="tooltip-renewal-{row.id}" role="tooltip"
-							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+					<div class="card p-4 variant-filled-surface" data-popup="renewal-{row.id}">
 						{row.licence_renewal_type}
-						<div class="tooltip-arrow" data-popper-arrow></div>
+						<div class="arrow variant-filled-secondary" />
 					</div>
 				</td>
 				<td>{row.subscription_name}</td>

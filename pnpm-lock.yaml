@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@floating-ui/dom':
-        specifier: ^1.6.3
+        specifier: ^1.6.5
         version: 1.6.5
       '@popperjs/core':
         specifier: ^2.11.8
