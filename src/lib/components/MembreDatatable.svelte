@@ -230,12 +230,12 @@
 		<button type="button"
 						on:click={() => memoriseMemberEmails($selected, members)}
 						class="btn variant-filled [&>*]:pointer-events-none" use:popup={popupHover}
-						disabled={$selected.length===0} >
+						disabled={$selected.length===0}>
 			<span><i class="fa-solid fa-clipboard"></i></span>
 			<span>Copy Adresses Email</span>
 		</button>
 		<div class="card p-4 variant-filled-surface" data-popup="popupHover">
-			{#if $selected.length===0}
+			{#if $selected.length === 0}
 				Sélectionnez des membres pour copier leurs adresses email
 			{:else}
 				Copier tous les emails des membres sélectionnés dans le presse-papier
@@ -288,18 +288,18 @@
 					/>
 				</td>
 				<td>
-					<button type="button" class="btn-icon btn-icon-sm variant-filled"
-									data-tooltip-target="tooltip-renewal-{row.id}">
+					<button type="button"
+									class="btn variant-filled [&>*]:pointer-events-none"
+									use:popup={{ event: 'hover', target: 'renewal-' + row.id, placement: 'top' }}>
 						{#if row.licence_renewal_type === 'Première'}
 							<i class="fa-solid fa-person-walking-arrow-right"></i>
 						{:else}
 							<i class="fa fa-refresh" aria-hidden="true"></i>
 						{/if}
 					</button>
-					<div id="tooltip-renewal-{row.id}" role="tooltip"
-							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+					<div class="card p-4 variant-filled-surface" data-popup="renewal-{row.id}">
 						{row.licence_renewal_type}
-						<div class="tooltip-arrow" data-popper-arrow></div>
+						<div class="arrow variant-filled-secondary" />
 					</div>
 				</td>
 				<td>{row.subscription_name}</td>
@@ -310,37 +310,34 @@
 				<td>{row.telephone_number}</td>
 				<td>{row.email_address}</td>
 				<td class="row-auto">
-					<a class="btn-icon btn-icon-sm variant-filled"
-						 data-tooltip-target="tooltip-display-{row.id}"
-						 href="/membres/{row.id}/display" data-tooltip-placement="left">
+					<a class="btn-icon btn-icon-sm variant-filled [&>*]:pointer-events-none"
+						 use:popup={{ event: 'hover', target: 'display-' + row.id, placement: 'left' }}
+						 href="/membres/{row.id}/display">
 						<i class="fa-solid fa-display"></i>
 					</a>
-					<div id="tooltip-display-{row.id}" role="tooltip"
-							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-						Voir l'inscription complète de {row.subscription_name}.
-						<div class="tooltip-arrow" data-popper-arrow></div>
+					<div class="card p-4 variant-filled-surface" data-popup="display-{row.id}">
+						Voir la fiche complète de {row.subscription_name}
+						<div class="arrow variant-filled-secondary" />
 					</div>
-					<a type="button" class="btn-icon btn-icon-sm variant-filled"
-						 data-tooltip-target="tooltip-edit-{row.id}"
-						 href="/membres/{row.id}/edit" data-tooltip-placement="left">
+					<a class="btn-icon btn-icon-sm variant-filled [&>*]:pointer-events-none"
+						 use:popup={{ event: 'hover', target: 'edit-' + row.id, placement: 'left' }}
+						 href="/membres/{row.id}/edit">
 						<i class="fa-solid fa-pen-to-square"></i>
 					</a>
-					<div id="tooltip-edit-{row.id}" role="tooltip"
-							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-						Editer pour modification l'inscription de {row.subscription_name}.
-						<div class="tooltip-arrow" data-popper-arrow></div>
+					<div class="card p-4 variant-filled-surface" data-popup="edit-{row.id}">
+						Editer pour modification la fiche de {row.subscription_name}
+						<div class="arrow variant-filled-secondary" />
 					</div>
 					<button
 						type="button"
-						class="btn-icon btn-icon-sm variant-filled"
+						class="btn-icon btn-icon-sm variant-filled [&>*]:pointer-events-none"
 						on:click={() => createAndOpenPdf(row)}
-						data-tooltip-target="tooltip-pdf-{row.id}" data-tooltip-placement="left">
+						use:popup={{ event: 'hover', target: 'pdf-' + row.id, placement: 'left' }}>
 						<i class="fa-solid fa-file-pdf"></i>
 					</button>
-					<div id="tooltip-pdf-{row.id}" role="tooltip"
-							 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-						Générer le pdf pour imprimer l'inscription de {row.subscription_name}.
-						<div class="tooltip-arrow" data-popper-arrow></div>
+					<div class="card p-4 variant-filled-surface" data-popup="pdf-{row.id}">
+						Générer le pdf de la fiche de {row.subscription_name} pour impression
+						<div class="arrow variant-filled-secondary" />
 					</div>
 				</td>
 			</tr>

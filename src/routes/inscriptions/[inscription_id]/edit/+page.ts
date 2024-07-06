@@ -1,7 +1,6 @@
 import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
 import { StorageService } from '$lib/storage/StorageService';
 import { HttpMethod } from '$lib/http/HttpMethod';
-import type { Membre } from '$lib/data/models/Membre';
 import type { Inscription } from '$lib/data/models/Inscription';
 
 export async function _updateSubscriptionData(subscriptionId: number, updatedSubscription: Inscription) {
