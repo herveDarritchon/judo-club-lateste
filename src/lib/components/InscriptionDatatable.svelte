@@ -10,14 +10,7 @@
 	//Import handler from SSD
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Inscription } from '$lib/data/models/Inscription';
-	import {
-		getModalStore,
-		getToastStore,
-		type ModalSettings,
-		popup,
-		type PopupSettings,
-		type ToastSettings
-	} from '@skeletonlabs/skeleton';
+	import { getModalStore, getToastStore, type ModalSettings, popup, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
 	import { StorageService } from '$lib/storage/StorageService';
 	import { HttpMethod } from '$lib/http/HttpMethod';
@@ -274,6 +267,44 @@
 		pdfMake.createPdf(docDefinition).open();
 	}
 
+	function isReadyToBecomeAMember(row: Inscription) {
+		return row.medical_certificate
+		&& row.licence_fee_paid;
+	}
+
+	function buildSubscriptionState(row: Inscription) {
+		switch (row.subscription_state) {
+			case 1:
+				return `
+<div class="not-started">
+	<span><i class="fa-solid fa-temperature-empty"></i>
+	</span><span class="label">Non débuté</span>
+</div>
+`;
+			case 2:
+				if (!isReadyToBecomeAMember(row)) {
+					return `
+<div class="started">
+	<span><i class="fa-solid fa-temperature-half"></i></span>
+	<span class="label">En cours</span>
+</div>
+`;
+				} else {
+					return `
+<div class="finished">
+	<span><i class="fa-solid fa-temperature-full"></i></span>
+	<span class="label">Validé</span>
+</div>`;
+				}
+			default:
+				return `
+<div class="unknown">
+	<span><i class="fa-solid fa-triangle-exclamation"></i></span>
+	<span class="label">Statut inconnu</span>
+</div>`;
+		}
+	}
+
 </script>
 
 <div class=" overflow-x-auto space-y-4">
@@ -287,6 +318,7 @@
 		<thead>
 		<tr>
 			<ThSort {handler} orderBy="licence_renewal_type">Mode</ThSort>
+			<ThSort {handler} orderBy="subscription_state">État</ThSort>
 			<ThSort {handler} orderBy="subscription_name">Nom</ThSort>
 			<ThSort {handler} orderBy="activity">Activité</ThSort>
 			<ThSort {handler} orderBy="dojo">Dojo</ThSort>
@@ -297,6 +329,7 @@
 		</tr>
 		<tr>
 			<ThFilter {handler} filterBy="licence_renewal_type" />
+			<ThFilter {handler} filterBy="subscription_state" />
 			<ThFilter {handler} filterBy="subscription_name" />
 			<ThFilter {handler} filterBy="activity" />
 			<ThFilter {handler} filterBy="dojo" />
@@ -324,6 +357,7 @@
 						<div class="arrow variant-filled-secondary" />
 					</div>
 				</td>
+				<td class="subscription-status-label">{ @html buildSubscriptionState(row) }</td>
 				<td>{row.subscription_name}</td>
 				<td>{row.activity}</td>
 				<td>{row.dojo}</td>
@@ -382,3 +416,40 @@
 		<Pagination {handler} />
 	</footer>
 </div>
+
+<style lang="scss">
+  td {
+    text-align: center;
+  }
+
+  td.subscription-status-label {
+    :global( span.label ) {
+      margin-left: 0.5rem;
+    }
+
+    :global(div) {
+			border-radius: 5px;
+    }
+
+    :global(div.not-started) {
+      background-color: #cce5ff;
+      color: #004085;
+    }
+
+    :global(div.started) {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    :global(div.finished) {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    :global(div.unknown) {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  }
+
+</style>
