@@ -3,8 +3,9 @@
 	import TelephoneNumberSVG from '$lib/components/svg/TelephoneNumberSVG.svelte';
 	import DateCalendarSVG from '$lib/components/svg/DateCalendarSVG.svelte';
 	import { _updateSubscriptionData } from './+page';
-	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { getToastStore, popup, type ToastSettings } from '@skeletonlabs/skeleton';
 	import type { Inscription } from '$lib/data/models/Inscription';
+	import { Span } from 'flowbite-svelte';
 
 	export let data;
 	export let subscription: Inscription = data.subscription.data;
@@ -28,7 +29,7 @@
 			};
 		} catch (e: any) {
 			const errorMessage = 'Erreur lors de la Mise à jour de l\'inscription ' + updatedSubscription.subscription_name;
-			console.error(errorMessage, e)
+			console.error(errorMessage, e);
 			t = {
 				message: errorMessage,
 				background: 'variant-filled-error',
@@ -37,6 +38,22 @@
 			};
 		}
 		toastStore.trigger(t);
+	}
+
+	function subscriptionValidation(updatedSubscription: Inscription) {
+		const t: ToastSettings = {
+			message: 'Validation de la fiche de ' + updatedSubscription.subscription_name + ' pour cette saison',
+			background: 'variant-filled-primary',
+			hideDismiss: true,
+			timeout: 3000
+		};
+		toastStore.trigger(t);
+
+	}
+
+	function subscriptionIsValid(updatedSubscription: Inscription) {
+		return (updatedSubscription.subscription_state === 2 && updatedSubscription.extranet_validation_check
+			&& updatedSubscription.medical_certificate && updatedSubscription.licence_fee_paid);
 	}
 </script>
 
@@ -198,7 +215,8 @@
 
 			<div class="flex items-center mb-4">
 				<label class="block text-gray-300 text-sm font-bold mb-2" for="medical_certificate">Certificat Médical</label>
-				<input type="checkbox" id="medical_certificate" bind:checked={updatedSubscription.medical_certificate} class="ml-2">
+				<input type="checkbox" id="medical_certificate" bind:checked={updatedSubscription.medical_certificate}
+							 class="ml-2">
 			</div>
 
 			<div class="flex items-center mb-4">
@@ -222,13 +240,13 @@
 								 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 				</div>
 
-
 			</div>
 
 			<div class="flex items-center mb-4">
 				<label class="block text-gray-300 text-sm font-bold mb-2" for="extranet_validation_check">Vérification de
 					Validation Extranet</label>
-				<input type="checkbox" id="extranet_validation_check" bind:checked={updatedSubscription.extranet_validation_check}
+				<input type="checkbox" id="extranet_validation_check"
+							 bind:checked={updatedSubscription.extranet_validation_check}
 							 class="ml-2">
 			</div>
 
@@ -238,11 +256,29 @@
 							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
-			<div class="flex items-center justify-between col-span-1 md:col-span-2">
-				<button type="submit"
-								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-					Enregistrer
-				</button>
+			<div>
+
+				<div class="flex items-center justify-between col-span-1 md:col-span-2">
+					<button type="submit"
+									class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+						Enregistrer
+					</button>
+
+					<button
+						type="button"
+						class="btn variant-filled-primary [&>*]:pointer-events-none"
+						on:click={() =>subscriptionValidation(updatedSubscription)}
+						use:popup={{ event: 'hover', target: 'pdf-' + updatedSubscription.id, placement: 'left' }}
+						disabled={!subscriptionIsValid(updatedSubscription)}>
+						<span><i class="fa-solid fa-check"></i></span>
+						<span>Valider comme licencié</span>
+					</button>
+					<div class="card p-4 variant-filled-surface" data-popup="pdf-{updatedSubscription.id}">
+						Valide la fiche de {updatedSubscription.subscription_name} pour cette saison
+						<div class="arrow variant-filled-secondary" />
+					</div>
+
+				</div>
 			</div>
 		</form>
 	</div>

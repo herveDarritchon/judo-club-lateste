@@ -268,8 +268,11 @@
 	}
 
 	function isReadyToBecomeAMember(row: Inscription) {
-		return row.medical_certificate
-		&& row.licence_fee_paid;
+		return isReadyForExtranet(row) && row.extranet_validation_check;
+	}
+
+	function isReadyForExtranet(row: Inscription) {
+		return row.medical_certificate && row.licence_fee_paid;
 	}
 
 	function buildSubscriptionState(row: Inscription) {
@@ -282,19 +285,25 @@
 </div>
 `;
 			case 2:
-				if (!isReadyToBecomeAMember(row)) {
-					return `
-<div class="started">
-	<span><i class="fa-solid fa-temperature-half"></i></span>
-	<span class="label">En cours</span>
-</div>
-`;
-				} else {
+				if (isReadyToBecomeAMember(row)) {
 					return `
 <div class="finished">
 	<span><i class="fa-solid fa-temperature-full"></i></span>
-	<span class="label">Validé</span>
+	<span class="label">À valider</span>
 </div>`;
+				} else if (isReadyForExtranet(row)) {
+					return `
+<div class="to-extranet">
+	<span><i class="fa-solid fa-temperature-three-quarters"></i></span>
+	<span class="label">À inscrire extranet</span>
+</div>`;
+				} else {
+					return `
+<div class="started">
+	<span><i class="fa-solid fa-temperature-quarter"></i></span>
+	<span class="label">En cours</span>
+</div>
+`;
 				}
 			default:
 				return `
@@ -428,7 +437,7 @@
     }
 
     :global(div) {
-			border-radius: 5px;
+      border-radius: 5px;
     }
 
     :global(div.not-started) {
@@ -441,9 +450,14 @@
       color: #856404;
     }
 
+    :global(div.to-extranet) {
+      background-color: #beeac9;
+      color: #3a814b;
+    }
+
     :global(div.finished) {
-      background-color: #d4edda;
-      color: #155724;
+			background-color: #3b6746;
+			color: #113c1b;
     }
 
     :global(div.unknown) {
