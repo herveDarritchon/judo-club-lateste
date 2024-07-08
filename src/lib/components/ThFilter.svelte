@@ -7,7 +7,7 @@
 
 <th>
 	<input
-		class="input text-sm w-full"
+		class="input text-xs w-full"
 		type="text"
 		placeholder="Filtre"
 		bind:value

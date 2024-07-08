@@ -286,26 +286,25 @@
 </div>
 `;
 			case 2:
-				if (isReadyToBecomeAMember(row)) {
-					return `
-<div class="finished">
-	<span><i class="fa-solid fa-temperature-full"></i></span>
-	<span class="label">À valider</span>
-</div>`;
-				} else if (isReadyForExtranet(row)) {
-					return `
-<div class="to-extranet">
-	<span><i class="fa-solid fa-temperature-three-quarters"></i></span>
-	<span class="label">À inscrire extranet</span>
-</div>`;
-				} else {
 					return `
 <div class="started">
 	<span><i class="fa-solid fa-temperature-quarter"></i></span>
 	<span class="label">En cours</span>
 </div>
 `;
-				}
+			case 3:
+					return `
+<div class="to-extranet">
+	<span><i class="fa-solid fa-temperature-three-quarters"></i></span>
+	<span class="label">À inscrire extranet</span>
+</div>`;
+			case 4:
+					return `
+<div class="finished">
+	<span><i class="fa-solid fa-temperature-full"></i></span>
+	<span class="label">À valider</span>
+</div>
+`;
 			default:
 				return `
 <div class="unknown">

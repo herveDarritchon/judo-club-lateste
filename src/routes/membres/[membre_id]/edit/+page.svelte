@@ -56,58 +56,58 @@
 				de {member.subscription_name}</h1>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="subscription_name">Nom du membre</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="subscription_name">Nom du membre</label>
 				<input type="text" id="subscription_name" bind:value={updatedMember.subscription_name}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="licence_renewal_type">Type de Licence</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="licence_renewal_type">Type de Licence</label>
 				<select id="sex" bind:value={updatedMember.licence_renewal_type}
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="Première">Première</option>
 					<option value="Renouvellement">Renouvellement</option>
 				</select>
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="birthday">Date de Naissance</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="birthday">Date de Naissance</label>
 				<div class="relative max-w-sm">
 					<DateCalendarSVG cssClass="w-5 h-5 text-gray-200 dark:text-gray-400" />
 					<input type="text" id="birthday"
 								 bind:value={updatedMember.birthday}
-								 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+								 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 				</div>
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="sex">Sexe</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="sex">Sexe</label>
 				<select id="sex" bind:value={updatedMember.sex}
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="Homme">Homme</option>
 					<option value="Femme">Femme</option>
 				</select>
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="birth_place">Lieu de Naissance</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="birth_place">Lieu de Naissance</label>
 				<input type="text" id="birth_place" bind:value={updatedMember.birth_place}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="activity">Activité</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="activity">Activité</label>
 				<select id="activity" bind:value={updatedMember.activity}
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="Taïso">Taïso</option>
 					<option value="Judo">Judo</option>
 				</select>
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="judo_belt">Ceinture de Judo</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="judo_belt">Ceinture de Judo</label>
 				<select id="judo_belt" bind:value={updatedMember.judo_belt}
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="Sans">Sans</option>
 					<option value="Blanche">Blanche</option>
 					<option value="Blanche 1 liseré jaune">Blanche 1 liseré jaune</option>
@@ -126,9 +126,9 @@
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="category">Catégorie</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="category">Catégorie</label>
 				<select id="category" bind:value={updatedMember.category}
-								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="Sans">Sans</option>
 					<option value="baby-judo">Baby-judo</option>
 					<option value="mini-poussin">Mini-poussin</option>
@@ -142,100 +142,100 @@
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="postal_address">Adresse Postale</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="postal_address">Adresse Postale</label>
 				<input type="text" id="postal_address" bind:value={updatedMember.postal_address}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="email_address">Adresse Email</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="email_address">Adresse Email</label>
 				<input type="email" id="email_address" bind:value={updatedMember.email_address}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="telephone_number">Numéro de Téléphone</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="telephone_number">Numéro de Téléphone</label>
 				<div class="relative max-w-sm">
 					<div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
 						<TelephoneNumberSVG cssClass="w-5 h-5 text-gray-200 dark:text-gray-400" />
 					</div>
 					<input type="text" id="telephone_number" bind:value={updatedMember.telephone_number}
-								 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 				</div>
 			</div>
 
 			<div class="mb-4">
 				<div class="mb-4">
-					<label class="block text-gray-300 text-sm font-bold mb-2" for="emergency_contacts">Contacts d'Urgence</label>
+					<label class="block text-gray-300 text-xs font-bold mb-2" for="emergency_contacts">Contacts d'Urgence</label>
 					<div class="relative max-w-sm">
 						<ContactSVG cssClass="w-5 h-5 text-gray-200 dark:text-gray-400" />
 						<input type="text" id="emergency_contacts" bind:value={updatedMember.emergency_contacts}
-									 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					</div>
 				</div>
 
 			</div>
 
 			<div class="flex items-center mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="activity_authorization">Autorisation
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="activity_authorization">Autorisation
 					d'Activité</label>
 				<input type="checkbox" id="activity_authorization" bind:checked={updatedMember.activity_authorization}
 							 class="ml-2">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="release_and_waive_agreement">Accord de
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="release_and_waive_agreement">Accord de
 					Renonciation et de Décharge</label>
 				<input type="text" id="release_and_waive_agreement" bind:value={updatedMember.release_and_waive_agreement}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="comments">Commentaires</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="comments">Commentaires</label>
 				<textarea id="comments" bind:value={updatedMember.comments}
-									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
 			</div>
 
 			<div class="flex items-center mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="medical_certificate">Certificat Médical</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="medical_certificate">Certificat Médical</label>
 				<input type="checkbox" id="medical_certificate" bind:checked={updatedMember.medical_certificate} class="ml-2">
 			</div>
 
 			<div class="flex items-center mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="licence_fee_paid">Frais de Licence Payés</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="licence_fee_paid">Frais de Licence Payés</label>
 				<input type="checkbox" id="licence_fee_paid" bind:checked={updatedMember.licence_fee_paid} class="ml-2">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="subscription_state">État de l'Abonnement</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="subscription_state">État de l'Abonnement</label>
 				<input type="number" id="subscription_state" bind:value={updatedMember.subscription_state}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="extranet_validation_date">Date de Validation
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="extranet_validation_date">Date de Validation
 					Extranet</label>
 				<div class="relative max-w-sm">
 					<DateCalendarSVG cssClass="w-5 h-5 text-gray-200 dark:text-gray-400" />
 					<input type="text" id="extranet_validation_date"
 								 bind:value={updatedMember.extranet_validation_date}
-								 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+								 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 				</div>
 
 
 			</div>
 
 			<div class="flex items-center mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="extranet_validation_check">Vérification de
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="extranet_validation_check">Vérification de
 					Validation Extranet</label>
 				<input type="checkbox" id="extranet_validation_check" bind:checked={updatedMember.extranet_validation_check}
 							 class="ml-2">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="dojo">Dojo</label>
+				<label class="block text-gray-300 text-xs font-bold mb-2" for="dojo">Dojo</label>
 				<input type="text" id="dojo" bind:value={updatedMember.dojo}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="flex items-center justify-between col-span-1 md:col-span-2">
@@ -250,6 +250,6 @@
 
 <style>
     .container {
-        max-width: 1200px;
+        max-width: 1300px;
     }
 </style>

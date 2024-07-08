@@ -12,7 +12,6 @@
 
 	function handleFilter() {
 		if (selectFilter === defaultValue) {
-			console.log('filtering by default');
 			handler.clearFilters();
 		} else if (filterBy) {
 			handler.filter(selectFilter, filterBy, customCheck);
@@ -24,7 +23,7 @@
 	<select id="licence_renewal_type"
 					bind:value={selectFilter}
 					on:change={() => handleFilter()}
-					class="input text-sm w-full"
+					class="input text-xs w-full"
 	>
 		<option value={defaultValue}>{defaultValue}</option>
 		<option value="Première">Première</option>
