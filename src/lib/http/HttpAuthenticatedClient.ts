@@ -3,7 +3,6 @@ import { HttpClient } from '$lib/http/HttpClient';
 import { JWTAuthBody, type JWTAuthBodyProps } from '$lib/security/body/JWTAuthBody';
 import { JWTAuthCookies, JWTAuthNoCookies } from '$lib/security/cookie/JWTAuthCookie';
 import { AuthToken, InvalidAuthToken, JWTAuthToken } from '$lib/security/authToken/JWTAuthToken';
-import { InvalidRefreshToken, RefreshToken } from '$lib/security/refreshToken/JWTRefreshToken';
 import { JWTAuthResponse } from '$lib/security/JWTAuthResponse';
 import { HttpMethod } from '$lib/http/HttpMethod';
 import { StorageService } from '$lib/storage/StorageService';

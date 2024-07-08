@@ -8,9 +8,9 @@
 
 	const members: Membre[] = data.members;
 
-	const popupHover: PopupSettings = {
+	const popupMembreHover: PopupSettings = {
 		event: 'hover',
-		target: 'popupHover',
+		target: 'popupMembreHover',
 		placement: 'top'
 	};
 </script>
@@ -28,11 +28,11 @@
 </div>
 
 <a class="btn variant-filled [&>*]:pointer-events-none" href="/"
-	 use:popup={popupHover}>
+	 use:popup={popupMembreHover}>
 	<span><i class="fa-solid fa-arrow-left"></i></span>
 	<span>Accueil</span>
 </a>
-<div class="card p-4 variant-filled-surface" data-popup="popupHover">
+<div class="card p-4 variant-filled-surface" data-popup="popupMembreHover">
 	Retour à la page d'accueil
 	<div class="arrow variant-filled-secondary" />
 </div>

@@ -215,9 +215,9 @@
 		navigator.clipboard.writeText(emails);
 	}
 
-	const popupHover: PopupSettings = {
+	const popupEmailHover: PopupSettings = {
 		event: 'hover',
-		target: 'popupHover',
+		target: 'popupEmailHover',
 		placement: 'top'
 	};
 </script>
@@ -229,12 +229,12 @@
 
 		<button type="button"
 						on:click={() => memoriseMemberEmails($selected, members)}
-						class="btn variant-filled [&>*]:pointer-events-none" use:popup={popupHover}
+						class="btn variant-filled [&>*]:pointer-events-none" use:popup={popupEmailHover}
 						disabled={$selected.length===0}>
 			<span><i class="fa-solid fa-clipboard"></i></span>
-			<span>Copy Adresses Email</span>
+			<span>Copie les Adresses Emails</span>
 		</button>
-		<div class="card p-4 variant-filled-surface" data-popup="popupHover">
+		<div class="card p-4 variant-filled-surface" data-popup="popupEmailHover">
 			{#if $selected.length === 0}
 				Sélectionnez des membres pour copier leurs adresses email
 			{:else}

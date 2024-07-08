@@ -6,9 +6,9 @@
 	export let data;
 	export const inscription: Inscription = data.subscription;
 
-	const popupHover: PopupSettings = {
+	const popupInscriptionHover: PopupSettings = {
 		event: 'hover',
-		target: 'popupHover',
+		target: 'popupInscriptionHover',
 		placement: 'top'
 	};
 	</script>
@@ -16,11 +16,11 @@
 <slot/>
 
 <a class="btn variant-filled [&>*]:pointer-events-none" href="/inscriptions"
-	 use:popup={popupHover}>
+	 use:popup={popupInscriptionHover}>
 	<span><i class="fa-solid fa-arrow-left"></i></span>
 	<span>Inscriptions</span>
 </a>
-<div class="card p-4 variant-filled-surface" data-popup="popupHover">
+<div class="card p-4 variant-filled-surface" data-popup="popupInscriptionHover">
 	Retour à la page des inscriptions
 	<div class="arrow variant-filled-secondary" />
 </div>

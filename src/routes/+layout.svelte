@@ -17,9 +17,9 @@
 
 	export let data;
 
-	const popupHover: PopupSettings = {
+	const popupAvatarHover: PopupSettings = {
 		event: 'hover',
-		target: 'popupHover',
+		target: 'popupAvatarHover',
 		placement: 'bottom'
 	};
 </script>
@@ -48,11 +48,11 @@
 					</a>
 				{:else}
 					<div class="flex-1 flex-col align-middle justify-center content-center [&>*]:pointer-events-none"
-							 use:popup={popupHover}>
+							 use:popup={popupAvatarHover}>
 						<img class="mx-auto" src="{data.user.avatar_urls['48']}" alt="avatar de l'utilisateur">
 						<span>{data.user.slug}</span>
 					</div>
-					<div class="card p-4 variant-filled-surface" data-popup="popupHover">
+					<div class="card p-4 variant-filled-surface" data-popup="popupAvatarHover">
 						<span>{data.user.name}</span>
 						<div class="arrow variant-filled-secondary" />
 					</div>

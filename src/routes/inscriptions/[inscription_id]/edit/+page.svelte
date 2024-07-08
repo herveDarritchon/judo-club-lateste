@@ -5,7 +5,7 @@
 	import { _updateSubscriptionData } from './+page';
 	import { getToastStore, popup, type ToastSettings } from '@skeletonlabs/skeleton';
 	import type { Inscription } from '$lib/data/models/Inscription';
-	import { Span } from 'flowbite-svelte';
+	import moment from 'moment';
 
 	export let data;
 	export let subscription: Inscription = data.subscription.data;
@@ -52,9 +52,19 @@
 	}
 
 	function subscriptionIsValid(updatedSubscription: Inscription) {
-		return (updatedSubscription.subscription_state === 2 && updatedSubscription.extranet_validation_check
-			&& updatedSubscription.medical_certificate && updatedSubscription.licence_fee_paid);
+		return (subscriptionIsReadyForExtranet(updatedSubscription) && updatedSubscription.extranet_validation_check);
 	}
+
+	function extranetDateIsValid(inscription: Inscription) {
+		// Date de référence
+		const referenceDate = moment('2024-01-01');
+		return moment(inscription.extranet_validation_date).isAfter(referenceDate);
+	}
+
+	function subscriptionIsReadyForExtranet(inscription: Inscription) {
+		return (inscription.subscription_state === 2 && inscription.medical_certificate && inscription.licence_fee_paid);
+	}
+
 </script>
 
 <div class="space-y-10">
@@ -213,10 +223,10 @@
 									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
 			</div>
 
-			<div class="flex items-center mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="medical_certificate">Certificat Médical</label>
-				<input type="checkbox" id="medical_certificate" bind:checked={updatedSubscription.medical_certificate}
-							 class="ml-2">
+			<div class="mb-4">
+				<label class="block text-gray-300 text-sm font-bold mb-2" for="dojo">Dojo</label>
+				<input type="text" id="dojo" bind:value={updatedSubscription.dojo}
+							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="flex items-center mb-4">
@@ -224,13 +234,14 @@
 				<input type="checkbox" id="licence_fee_paid" bind:checked={updatedSubscription.licence_fee_paid} class="ml-2">
 			</div>
 
-			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="subscription_state">État de l'Abonnement</label>
-				<input type="number" id="subscription_state" bind:value={updatedSubscription.subscription_state}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+			<div class="flex items-center  mb-4">
+				<label class="block text-gray-300 text-sm font-bold mb-2" for="medical_certificate">Certificat Médical</label>
+				<input type="checkbox" id="medical_certificate" bind:checked={updatedSubscription.medical_certificate}
+							 class="ml-2">
 			</div>
 
-			<div class="mb-4">
+			<div class="mb-4"
+					 class:hidden={!subscriptionIsReadyForExtranet(updatedSubscription)}>
 				<label class="block text-gray-300 text-sm font-bold mb-2" for="extranet_validation_date">Date de Validation
 					Extranet</label>
 				<div class="relative max-w-sm">
@@ -242,44 +253,51 @@
 
 			</div>
 
-			<div class="flex items-center mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="extranet_validation_check">Vérification de
-					Validation Extranet</label>
+			<div class="flex items-center mb-4"
+					 class:inactive={!extranetDateIsValid(updatedSubscription)}
+					 class:hidden={!subscriptionIsReadyForExtranet(updatedSubscription)}
+			>
+				<label class="block text-gray-300 text-sm font-bold mb-2" for="extranet_validation_check">
+					Vérification de Validation Extranet</label>
 				<input type="checkbox" id="extranet_validation_check"
 							 bind:checked={updatedSubscription.extranet_validation_check}
 							 class="ml-2">
 			</div>
 
 			<div class="mb-4">
-				<label class="block text-gray-300 text-sm font-bold mb-2" for="dojo">Dojo</label>
-				<input type="text" id="dojo" bind:value={updatedSubscription.dojo}
+				<label class="block text-gray-300 text-sm font-bold mb-2" for="subscription_state">État de l'Abonnement</label>
+				<input type="number" id="subscription_state" bind:value={updatedSubscription.subscription_state}
 							 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
-			<div>
+			<div class="flex items-center justify-between col-span-1 md:col-span-2">
 
-				<div class="flex items-center justify-between col-span-1 md:col-span-2">
-					<button type="submit"
-									class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-						Enregistrer
-					</button>
-
-					<button
-						type="button"
-						class="btn variant-filled-primary [&>*]:pointer-events-none"
-						on:click={() =>subscriptionValidation(updatedSubscription)}
-						use:popup={{ event: 'hover', target: 'pdf-' + updatedSubscription.id, placement: 'left' }}
-						disabled={!subscriptionIsValid(updatedSubscription)}>
-						<span><i class="fa-solid fa-check"></i></span>
-						<span>Valider comme licencié</span>
-					</button>
-					<div class="card p-4 variant-filled-surface" data-popup="pdf-{updatedSubscription.id}">
-						Valide la fiche de {updatedSubscription.subscription_name} pour cette saison
-						<div class="arrow variant-filled-secondary" />
-					</div>
-
+				<button type="submit"
+								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline [&>*]:pointer-events-none"
+								use:popup={{ event: 'hover', target: 'save-' + updatedSubscription.id, placement: 'top' }}>
+					Enregistrer
+				</button>
+				<div class="card p-4 variant-filled-surface" data-popup="save-{updatedSubscription.id}">
+					Enregistre les modifications de la fiche d'inscription de {updatedSubscription.subscription_name}
+					<div class="arrow variant-filled-secondary" />
 				</div>
+
+				<button
+					type="button"
+					class="btn variant-filled-primary [&>*]:pointer-events-none"
+					on:click={() =>subscriptionValidation(updatedSubscription)}
+					use:popup={{ event: 'hover', target: 'validate-' + updatedSubscription.id, placement: 'top' }}
+					disabled={!subscriptionIsValid(updatedSubscription)}>
+					<span><i class="fa-solid fa-check"></i></span>
+					<span>Valider comme licencié</span>
+				</button>
+				<div class="card p-4 variant-filled-surface" data-popup="validate-{updatedSubscription.id}">
+					Valide comme licencié la fiche de {updatedSubscription.subscription_name} pour cette saison
+					<div class="arrow variant-filled-secondary" />
+				</div>
+
 			</div>
+
 		</form>
 	</div>
 </div>
@@ -288,4 +306,11 @@
     .container {
         max-width: 1200px;
     }
+
+    div.inactive {
+        opacity: 0.5; /* Rend l'élément semi-transparent */
+        color: #ccc; /* Couleur de texte gris clair pour indiquer l'inactivité */
+        pointer-events: none; /* Désactive les interactions de la souris */
+    }
+
 </style>
