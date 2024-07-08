@@ -65,6 +65,10 @@
 		return (inscription.subscription_state === 2 && inscription.medical_certificate && inscription.licence_fee_paid);
 	}
 
+	$: subscriptionIsUpdated = (initial: Inscription, current: Inscription) => {
+		return JSON.stringify(initial) !== JSON.stringify(current);
+	};
+
 </script>
 
 <div class="space-y-10">
@@ -90,7 +94,7 @@
 
 			<div class="mb-4">
 				<label class="block text-gray-300 text-sm font-bold mb-2" for="licence_renewal_type">Type de Licence</label>
-				<select id="sex" bind:value={updatedSubscription.licence_renewal_type}
+				<select id="licence_renewal_type" bind:value={updatedSubscription.licence_renewal_type}
 								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 					<option value="Première">Première</option>
 					<option value="Renouvellement">Renouvellement</option>
@@ -272,10 +276,13 @@
 
 			<div class="flex items-center justify-between col-span-1 md:col-span-2">
 
-				<button type="submit"
-								class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline [&>*]:pointer-events-none"
-								use:popup={{ event: 'hover', target: 'save-' + updatedSubscription.id, placement: 'top' }}>
-					Enregistrer
+				<button
+					type="submit"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline [&>*]:pointer-events-none"
+					use:popup={{ event: 'hover', target: 'save-' + updatedSubscription.id, placement: 'top' }}
+					disabled={!subscriptionIsUpdated(subscription, updatedSubscription)}>
+					<span><i class="fa-solid fa-save"></i></span>
+					<span>Enregistrer</span>
 				</button>
 				<div class="card p-4 variant-filled-surface" data-popup="save-{updatedSubscription.id}">
 					Enregistre les modifications de la fiche d'inscription de {updatedSubscription.subscription_name}
@@ -311,6 +318,11 @@
         opacity: 0.5; /* Rend l'élément semi-transparent */
         color: #ccc; /* Couleur de texte gris clair pour indiquer l'inactivité */
         pointer-events: none; /* Désactive les interactions de la souris */
+    }
+
+    button[type="submit"]:disabled {
+        @apply bg-tertiary-300;
+        cursor: not-allowed;
     }
 
 </style>

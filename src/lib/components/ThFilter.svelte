@@ -9,7 +9,7 @@
 	<input
 		class="input text-sm w-full"
 		type="text"
-		placeholder="Filter"
+		placeholder="Filtre"
 		bind:value
 		on:input={() => {
 			if (filterBy) handler.filter(value, filterBy);

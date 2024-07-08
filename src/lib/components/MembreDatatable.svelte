@@ -11,6 +11,7 @@
 	import { DataHandler } from '@vincjo/datatables';
 	import type { Membre } from '$lib/data/models/Membre';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import ThRenewalFilter from '$lib/components/ThRenewalFilter.svelte';
 
 	//Load remote data
 	export let members: Membre[] = [];
@@ -267,7 +268,7 @@
 							 checked={$isAllSelected}
 				/>
 			</th>
-			<ThFilter {handler} filterBy="licence_renewal_type" />
+			<ThRenewalFilter {handler} filterBy="licence_renewal_type" />
 			<ThFilter {handler} filterBy="subscription_name" />
 			<ThFilter {handler} filterBy="activity" />
 			<ThFilter {handler} filterBy="dojo" />

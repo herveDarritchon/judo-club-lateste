@@ -15,6 +15,7 @@
 	import { StorageService } from '$lib/storage/StorageService';
 	import { HttpMethod } from '$lib/http/HttpMethod';
 	import { destroy } from '../../routes/inscriptions/store';
+	import ThRenewalFilter from '$lib/components/ThRenewalFilter.svelte';
 
 	//Load remote data
 	export let subscriptions: Inscription[] = [];
@@ -337,7 +338,7 @@
 			<td>Actions</td>
 		</tr>
 		<tr>
-			<ThFilter {handler} filterBy="licence_renewal_type" />
+			<ThRenewalFilter {handler} filterBy="licence_renewal_type" />
 			<ThFilter {handler} filterBy="subscription_state" />
 			<ThFilter {handler} filterBy="subscription_name" />
 			<ThFilter {handler} filterBy="activity" />
