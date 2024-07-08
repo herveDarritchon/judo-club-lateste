@@ -139,11 +139,12 @@ export class HttpAuthenticatedClient extends HttpClient {
 		const rawToken: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
 		const token = new AuthToken(rawToken);
 		if (!token || !token.isValid()) {
-			const token: RefreshToken = this.storageService.read(HttpAuthenticatedClient.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();
-			if (!token || !token.isValid()) {
-				throw new Error('No refresh token found or auth token is invalid');
+			const jwtAuthToken = await this.createTokenFromRefreshToken(device);
+			/*const token: RefreshToken = this.storageService.read(HttpAuthenticatedClient.REFRESH_TOKEN_KEY) ?? new InvalidRefreshToken();*/
+			if (!jwtAuthToken || !jwtAuthToken.isValid()) {
+				throw new Error('No refresh token or auth token are valid');
 			}
-			return (await this.createTokenFromRefreshToken(device)).authToken;
+			return jwtAuthToken.authToken;
 		}
 		return token;
 	}
