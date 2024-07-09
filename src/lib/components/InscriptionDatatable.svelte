@@ -17,6 +17,7 @@
 	import { destroy } from '../../routes/inscriptions/store';
 	import ThRenewalFilter from '$lib/components/ThRenewalFilter.svelte';
 	import ThDateSort from '$lib/components/ThDateSort.svelte';
+	import ThStatusFilter from '$lib/components/ThStatusFilter.svelte';
 
 	//Load remote data
 	export let subscriptions: Inscription[] = [];
@@ -331,7 +332,7 @@
 		</tr>
 		<tr>
 			<ThRenewalFilter {handler} filterBy="licence_renewal_type" />
-			<ThFilter {handler} filterBy="subscription_state" />
+			<ThStatusFilter {handler} filterBy="subscription_state" />
 			<ThFilter {handler} filterBy="subscription_name" />
 			<ThFilter {handler} filterBy="activity" />
 			<ThFilter {handler} filterBy="dojo" />

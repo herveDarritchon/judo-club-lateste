@@ -68,18 +68,14 @@
 			const format = 'DD/MM/YYYY';
 			const referenceDate = moment('01-01-2024', format);
 			const subscriptionExtranetDate = moment(extranetValidationDateStr, format);
-			const isAfter = subscriptionExtranetDate.isAfter(referenceDate);
-			console.log(`Date de référence: ${referenceDate} - Date de validation extranet: ${subscriptionExtranetDate} with result: ${isAfter}`);
-			return isAfter;
+			return subscriptionExtranetDate.isAfter(referenceDate);
 		}
 
 		return false;
 	}
 
 	function subscriptionIsReadyForExtranet(inscription: Inscription) {
-		const result = inscription.medical_certificate && inscription.licence_fee_paid;
-		console.log(`inscription.medical_certificate  (${inscription.medical_certificate}) && inscription.licence_fee_paid (${inscription.licence_fee_paid}) && !inscription.extranet_validation_check (${!inscription.extranet_validation_check}) with Result:  ${result}`);
-		return result;
+		return inscription.medical_certificate && inscription.licence_fee_paid;
 	}
 
 	$: subscriptionIsUpdated = (initial: Inscription, current: Inscription) => {
