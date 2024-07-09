@@ -234,7 +234,7 @@
 						class="btn variant-filled [&>*]:pointer-events-none" use:popup={popupEmailHover}
 						disabled={$selected.length===0}>
 			<span><i class="fa-solid fa-clipboard"></i></span>
-			<span>Copie les Adresses Emails</span>
+			<span>Copie des Adresses Emails</span>
 		</button>
 		<div class="card p-4 variant-filled-surface" data-popup="popupEmailHover">
 			{#if $selected.length === 0}
