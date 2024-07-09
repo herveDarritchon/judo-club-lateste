@@ -16,6 +16,7 @@
 	import { HttpMethod } from '$lib/http/HttpMethod';
 	import { destroy } from '../../routes/inscriptions/store';
 	import ThRenewalFilter from '$lib/components/ThRenewalFilter.svelte';
+	import ThDateSort from '$lib/components/ThDateSort.svelte';
 
 	//Load remote data
 	export let subscriptions: Inscription[] = [];
@@ -323,7 +324,7 @@
 			<ThSort {handler} orderBy="subscription_name">Nom</ThSort>
 			<ThSort {handler} orderBy="activity">Activité</ThSort>
 			<ThSort {handler} orderBy="dojo">Dojo</ThSort>
-			<ThSort {handler} orderBy="birthday">Date de naissance</ThSort>
+			<ThDateSort {handler} orderBy="birthday">Date de naissance</ThDateSort>
 			<ThSort {handler} orderBy="telephone_number">Téléphone</ThSort>
 			<ThSort {handler} orderBy="email_address">Email</ThSort>
 			<td>Actions</td>
