@@ -19,6 +19,10 @@
 	import ThDateSort from '$lib/components/ThDateSort.svelte';
 	import ThStatusFilter from '$lib/components/ThStatusFilter.svelte';
 
+	import {
+		PUBLIC_BACKEND_API_URL,
+	} from '$env/static/public';
+
 	//Load remote data
 	export let subscriptions: Inscription[] = [];
 	let tableElement;
@@ -75,7 +79,7 @@
 	async function _deleteSubscriptionBy(subscriptionId: number, subscription: Inscription) {
 		let t: ToastSettings;
 		try {
-			await new HttpAuthenticatedClient('http://localhost:8888/judolateste', new StorageService(localStorage), fetch)
+			await new HttpAuthenticatedClient(PUBLIC_BACKEND_API_URL, new StorageService(localStorage), fetch)
 				.request('/wp-json/associationManagement/v1/subscriptions/' + subscriptionId, HttpMethod.DELETE);
 			t = {
 				message: 'Suppression réussie de l\'inscription de ' + subscription.subscription_name,

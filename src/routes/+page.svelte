@@ -1,10 +1,18 @@
+<script lang="ts">
+
+	import {
+		PUBLIC_BACKEND_API_URL,
+	} from '$env/static/public';
+
+</script>
+
 <div class="space-y-10">
 	<header class="flex justify-center items-center gap-10">
 		<img class="w-48" src="logo-app.webp" alt="Post" />
 	</header>
 	<!-- CTA -->
 	<div class="text-center">
-		<a class="btn variant-filled" href="http://localhost:8888/judolateste/" target="_blank">
+		<a class="btn variant-filled" href="{PUBLIC_BACKEND_API_URL}/" target="_blank">
 			Pour se rendre sur le site du Judo &rarr;
 		</a>
 	</div>
@@ -58,7 +66,7 @@
 	<footer class="text-center">
 		<small>
 			<span class="opacity-60">Si vous souhaitez vous rendre directement sur la </span>
-			<a class="anchor" href="http://localhost:8888/judolateste/wp-admin/" target="_blank">partie administration</a>
+			<a class="anchor" href="{PUBLIC_BACKEND_API_URL}/wp-admin/" target="_blank">partie administration</a>
 			<span class="opacity-60"> du site du Judo Club.</span>
 		</small>
 	</footer>

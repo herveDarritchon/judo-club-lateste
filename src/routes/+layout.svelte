@@ -11,6 +11,7 @@
 		Toast
 	} from '@skeletonlabs/skeleton';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+	import { PUBLIC_BACKEND_API_URL } from '$env/static/public';
 
 	initializeStores();
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -59,7 +60,7 @@
 				{/if}
 				<a
 					class="btn space-x-4 variant-soft hover:variant-soft-primary"
-					href="http://localhost:8888/judolateste/"
+					href="{PUBLIC_BACKEND_API_URL}/"
 					target="_blank"
 				>
 					<img src="/Logo_Judo_Testerin-Noir.png" alt="Judo Club La Teste" class="w-12 h-12" />

@@ -3,6 +3,9 @@
 	import { _userSchema } from './+page.js';
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { HttpAuthenticatedClient } from '$lib/http/HttpAuthenticatedClient';
+	import {
+		PUBLIC_BACKEND_API_URL,
+	} from '$env/static/public';
 
 	export let data;
 
@@ -16,8 +19,7 @@
 				if (form.data.email.includes('spam')) {
 					setError(form, 'email', 'Suspicious email address.');
 				} else if (form.valid) {
-					// TODO: Call an external API with form.data, await the result and update form
-					const token = await new HttpAuthenticatedClient("http://localhost:8888/judolateste").createTokenFromCredentials(form.data.email, form.data.password);
+					const token = await new HttpAuthenticatedClient(PUBLIC_BACKEND_API_URL).createTokenFromCredentials(form.data.email, form.data.password);
 					setMessage(form, 'Valid data!' + token);
 				}
 			}
