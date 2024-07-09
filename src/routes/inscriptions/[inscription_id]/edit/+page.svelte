@@ -14,10 +14,13 @@
 
 	let updatedSubscription = { ...subscription };
 
-	async function handleSubmit(event) {
+	async function handleSubmit(event: any) {
 		event.preventDefault();
 		let t: ToastSettings;
 		try {
+			if (updatedSubscription.subscription_state == 1 || updatedSubscription.subscription_state == 2) {
+				updatedSubscription.subscription_state = 2;
+			}
 			const updated = await _updateSubscriptionData(subscription.id, updatedSubscription);
 			// Handle the response, e.g., show a success message or redirect
 			const updateData = updated.subscription.data;
@@ -51,24 +54,49 @@
 
 	}
 
-	function subscriptionIsValid(updatedSubscription: Inscription) {
-		return (subscriptionIsReadyForExtranet(updatedSubscription) && updatedSubscription.extranet_validation_check);
+	function subscriptionIsValid(inscription: Inscription) {
+		return (inscription.medical_certificate && inscription.licence_fee_paid && inscription.extranet_validation_check);
 	}
 
 	function extranetDateIsValid(inscription: Inscription) {
-		// Date de référence
-		const referenceDate = moment('2024-01-01');
-		return moment(inscription.extranet_validation_date).isAfter(referenceDate);
+		// Expression régulière pour le format "dd/mm/yyyy"
+		const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+		const extranetValidationDateStr = inscription.extranet_validation_date;
+		if (regex.test(extranetValidationDateStr)) {
+			// Date de référence
+			const format = 'DD/MM/YYYY';
+			const referenceDate = moment('01-01-2024', format);
+			const subscriptionExtranetDate = moment(extranetValidationDateStr, format);
+			const isAfter = subscriptionExtranetDate.isAfter(referenceDate);
+			console.log(`Date de référence: ${referenceDate} - Date de validation extranet: ${subscriptionExtranetDate} with result: ${isAfter}`);
+			return isAfter;
+		}
+
+		return false;
 	}
 
 	function subscriptionIsReadyForExtranet(inscription: Inscription) {
-		return (inscription.subscription_state === 2 && inscription.medical_certificate && inscription.licence_fee_paid);
+		const result = inscription.medical_certificate && inscription.licence_fee_paid;
+		console.log(`inscription.medical_certificate  (${inscription.medical_certificate}) && inscription.licence_fee_paid (${inscription.licence_fee_paid}) && !inscription.extranet_validation_check (${!inscription.extranet_validation_check}) with Result:  ${result}`);
+		return result;
 	}
 
 	$: subscriptionIsUpdated = (initial: Inscription, current: Inscription) => {
 		return JSON.stringify(initial) !== JSON.stringify(current);
 	};
 
+	// Reactive statement to compute subscription_state
+	$: {
+		if (subscriptionIsValid(updatedSubscription)) {
+			updatedSubscription.subscription_state = 4;
+		} else if (subscriptionIsReadyForExtranet(updatedSubscription)) {
+			updatedSubscription.subscription_state = 3;
+		} else if (subscriptionIsUpdated(subscription, updatedSubscription)) {
+			updatedSubscription.extranet_validation_check = false;
+			updatedSubscription.subscription_state = 2;
+		}
+	}
 </script>
 
 <div class="space-y-10">

@@ -268,14 +268,6 @@
 		pdfMake.createPdf(docDefinition).open();
 	}
 
-	function isReadyToBecomeAMember(row: Inscription) {
-		return isReadyForExtranet(row) && row.extranet_validation_check;
-	}
-
-	function isReadyForExtranet(row: Inscription) {
-		return row.medical_certificate && row.licence_fee_paid;
-	}
-
 	function buildSubscriptionState(row: Inscription) {
 		switch (row.subscription_state) {
 			case 1:
