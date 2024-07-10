@@ -6,6 +6,7 @@
 	import { getToastStore, popup, type ToastSettings } from '@skeletonlabs/skeleton';
 	import type { Inscription } from '$lib/data/models/Inscription';
 	import moment from 'moment';
+	import { destroy, update } from '../../store';
 
 	export let data;
 	export let subscription: Inscription = data.subscription.data;
@@ -22,6 +23,8 @@
 				updatedSubscription.subscription_state = 2;
 			}
 			const updated = await _updateSubscriptionData(subscription.id, updatedSubscription);
+
+			update(updatedSubscription);
 			// Handle the response, e.g., show a success message or redirect
 			const updateData = updated.subscription.data;
 			t = {

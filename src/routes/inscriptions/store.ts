@@ -1,7 +1,7 @@
 import { type Writable, writable } from 'svelte/store';
 import type { Inscription } from '$lib/data/models/Inscription';
 
-export const subscriptions: Writable<Inscription[]> = writable([])
+export const subscriptions: Writable<Inscription[]> = writable([]);
 
 /*export const create = (subscription: Inscription) => {
 	subscription.id = Math.floor(Math.random() * 9999)
@@ -12,17 +12,17 @@ export const subscriptions: Writable<Inscription[]> = writable([])
 
 export const destroy = (subscription: Inscription) => {
 	subscriptions.update((store) => {
-		return store.filter((item) => item.id !== subscription.id)
-	})
-}
+		return store.filter((item) => item.id !== subscription.id);
+	});
+};
 
-/*
 export const update = (subscription: Inscription) => {
 	subscriptions.update((store) => {
-		const result = store.find((item) => item.id === subscription.id)
-		result.first_name = subscription.first_name
-		result.last_name = subscription.last_name
-		result.email = subscription.email
-		return store
-	})
-}*/
+		const index = store.findIndex((item) => item.id === subscription.id);
+		if (index !== -1) {
+			// Create a new object by merging the existing subscription with the new values
+			store[index] = { ...store[index], ...subscription };
+		}
+		return store;
+	});
+};
