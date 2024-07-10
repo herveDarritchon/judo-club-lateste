@@ -258,8 +258,11 @@
 
 			<div class="mb-4">
 				<label class="block text-gray-300 text-xs font-bold mb-2" for="dojo">Dojo</label>
-				<input type="text" id="dojo" bind:value={updatedSubscription.dojo}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+				<select id="activity" bind:value={updatedSubscription.dojo}
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+					<option value="Cazaux">Cazaux</option>
+					<option value="La Teste">La Teste</option>
+				</select>
 			</div>
 
 			<div class="flex items-center mb-4">
@@ -295,12 +298,6 @@
 				<input type="checkbox" id="extranet_validation_check"
 							 bind:checked={updatedSubscription.extranet_validation_check}
 							 class="ml-2">
-			</div>
-
-			<div class="mb-4">
-				<label class="block text-gray-300 text-xs font-bold mb-2" for="subscription_state">État de l'Abonnement</label>
-				<input type="number" id="subscription_state" bind:value={updatedSubscription.subscription_state}
-							 class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 			</div>
 
 			<div class="flex items-center justify-between col-span-1 md:col-span-2">
