@@ -23,7 +23,6 @@
 	import { JWTAuthNoCookies } from '$lib/security/cookie/JWTAuthCookie';
 	import { DeviceFingerPrint } from '$lib/security/fingerPrint/DeviceFingerPrint';
 	import { goto } from '$app/navigation';
-	import { destroy } from './inscriptions/store';
 
 	initializeStores();
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -44,8 +43,12 @@
 		const storageService = new StorageService(localStorage);
 		const body = { device: await new DeviceFingerPrint(storageService).get() };
 		try {
-			await new HttpAuthenticatedClient(PUBLIC_BACKEND_API_URL, storageService, fetch)
+			const response = await new HttpAuthenticatedClient(PUBLIC_BACKEND_API_URL, storageService, fetch)
 				.request('/wp-json/associationManagement/v1/admin/users/me/logout', HttpMethod.POST, new JWTAuthBody(body), new JWTAuthHeaders(), new JWTAuthNoCookies());
+			const data = await response.json();
+			if (!data.success) {
+				throw new Error('Erreur lors du logout du Current User');
+			}
 			storageService.remove(HttpAuthenticatedClient.AUTH_TOKEN_KEY);
 				t = {
 				message: user.slug +  ', vous êtes bien déconnecté de l\'application.',

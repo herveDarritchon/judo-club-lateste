@@ -184,10 +184,12 @@
 				<label class="block text-gray-300 text-xs font-bold mb-2" for="category">Catégorie</label>
 				<select id="category" bind:value={updatedSubscription.category}
 								class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-					<option value="Sans">Sans</option>
-					<option value="baby-judo">Baby-judo</option>
-					<option value="mini-poussin">Mini-poussin</option>
-					<option value="poussins">Poussins</option>
+					<option value="inconnue">Inconnue</option>
+					<option value="baby-judo">Baby judo</option>
+					<option value="mini-poussin1">Mini poussin 1</option>
+					<option value="mini-poussin2">Mini poussin 2</option>
+					<option value="poussins-1">Poussins 1</option>
+					<option value="poussins-2">Poussins 2</option>
 					<option value="benjamins">Benjamins</option>
 					<option value="minimes">Minimes</option>
 					<option value="cadets">Cadets</option>
