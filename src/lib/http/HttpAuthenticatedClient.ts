@@ -14,7 +14,7 @@ import { DeviceFingerPrint } from '$lib/security/fingerPrint/DeviceFingerPrint';
  * @public
  */
 export class HttpAuthenticatedClient extends HttpClient {
-	private readonly AUTH_TOKEN_KEY = 'auth_token';
+	public static readonly AUTH_TOKEN_KEY = 'auth_token';
 	public static readonly REFRESH_TOKEN_KEY = 'refresh_token';
 	private readonly storageService: StorageService;
 	private readonly deviceFingerPrint: DeviceFingerPrint;
@@ -77,7 +77,7 @@ export class HttpAuthenticatedClient extends HttpClient {
 		const data = await response.json();
 
 		const jwtAuthToken = new JWTAuthToken(new JWTAuthResponse(data));
-		this.storageService.save(this.AUTH_TOKEN_KEY, jwtAuthToken.authToken);
+		this.storageService.save(HttpAuthenticatedClient.AUTH_TOKEN_KEY, jwtAuthToken.authToken);
 		return jwtAuthToken;
 	}
 
@@ -101,7 +101,7 @@ export class HttpAuthenticatedClient extends HttpClient {
 
 		const data = await response.json();
 		const jwtAuthToken = new JWTAuthToken(new JWTAuthResponse(data));
-		this.storageService.save(this.AUTH_TOKEN_KEY, jwtAuthToken.authToken);
+		this.storageService.save(HttpAuthenticatedClient.AUTH_TOKEN_KEY, jwtAuthToken.authToken);
 		return jwtAuthToken;
 	}
 
@@ -135,7 +135,7 @@ export class HttpAuthenticatedClient extends HttpClient {
 	 * @private
 	 */
 	private async createToken(device: string): Promise<AuthToken> {
-		const rawToken: AuthToken = this.storageService.read(this.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
+		const rawToken: AuthToken = this.storageService.read(HttpAuthenticatedClient.AUTH_TOKEN_KEY) ?? new InvalidAuthToken();
 		const token = new AuthToken(rawToken);
 		if (!token || !token.isValid()) {
 			const jwtAuthToken = await this.createTokenFromRefreshToken(device);

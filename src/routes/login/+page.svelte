@@ -6,6 +6,7 @@
 	import {
 		PUBLIC_BACKEND_API_URL,
 	} from '$env/static/public';
+	import { goto } from '$app/navigation';
 
 	export let data;
 
@@ -19,8 +20,8 @@
 				if (form.data.email.includes('spam')) {
 					setError(form, 'email', 'Suspicious email address.');
 				} else if (form.valid) {
-					const token = await new HttpAuthenticatedClient(PUBLIC_BACKEND_API_URL).createTokenFromCredentials(form.data.email, form.data.password);
-					setMessage(form, 'Valid data!' + token);
+					await new HttpAuthenticatedClient(PUBLIC_BACKEND_API_URL).createTokenFromCredentials(form.data.email, form.data.password);
+					await goto('/');
 				}
 			}
 		}
