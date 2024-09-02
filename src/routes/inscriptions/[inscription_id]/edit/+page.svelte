@@ -51,7 +51,6 @@
 
 		try {
 			updatedSubscription.subscription_state = 5;
-			console.log ('UpdatedSubscription', updatedSubscription);
 			const updated = await _updateSubscriptionData(subscription.id, updatedSubscription);
 
 			update(updatedSubscription);
