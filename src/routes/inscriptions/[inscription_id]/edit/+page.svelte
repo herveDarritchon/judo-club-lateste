@@ -6,7 +6,7 @@
 	import { getToastStore, popup, type ToastSettings } from '@skeletonlabs/skeleton';
 	import type { Inscription } from '$lib/data/models/Inscription';
 	import moment from 'moment';
-	import { destroy, update } from '../../store';
+	import { update } from '../../store';
 
 	export let data;
 	export let subscription: Inscription = data.subscription.data;
@@ -46,13 +46,33 @@
 		toastStore.trigger(t);
 	}
 
-	function subscriptionValidation(updatedSubscription: Inscription) {
-		const t: ToastSettings = {
-			message: 'Validation de la fiche de ' + updatedSubscription.subscription_name + ' pour cette saison',
-			background: 'variant-filled-primary',
-			hideDismiss: true,
-			timeout: 3000
-		};
+	async function subscriptionValidation(updatedSubscription: Inscription) {
+		let t: ToastSettings;
+
+		try {
+			updatedSubscription.subscription_state = 5;
+			console.log ('UpdatedSubscription', updatedSubscription);
+			const updated = await _updateSubscriptionData(subscription.id, updatedSubscription);
+
+			update(updatedSubscription);
+
+			const updateData = updated.subscription.data;
+			t = {
+				message: 'Validation de la fiche de ' + updateData.subscription_name + ' pour cette saison',
+				background: 'variant-filled-primary',
+				hideDismiss: true,
+				timeout: 3000
+			};
+		} catch (e: any) {
+			const errorMessage = 'Erreur lors de la Mise à jour de l\'inscription ' + updatedSubscription.subscription_name;
+			console.error(errorMessage, e);
+			t = {
+				message: errorMessage,
+				background: 'variant-filled-error',
+				hideDismiss: true,
+				timeout: 3000
+			};
+		}
 		toastStore.trigger(t);
 
 	}
