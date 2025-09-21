@@ -32,6 +32,7 @@
 	}
 
 	function createAndOpenPdf(row: Membre) {
+		const renewalText = row.licence_renewal_type === 'Première' ? 'Pre' : "Ren";
 		const docDefinition = {
 			content: [
 				{
@@ -45,7 +46,7 @@
 						{
 							width: '10%',
 							text: [
-								{ text: row.licence_renewal_type === 'Première' ? '🆕' : '🔁', style: 'label' }
+								{ text: renewalText, style: 'header' }
 							],
 							alignment: 'center'
 						},
