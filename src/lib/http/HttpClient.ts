@@ -1,4 +1,3 @@
-import { JWTAuthBody } from '$lib/security/body/JWTAuthBody';
 import { JWTAuthHeaders } from '$lib/security/header/JWTAuthHeader';
 import { JWTAuthCookies } from '$lib/security/cookie/JWTAuthCookie';
 
