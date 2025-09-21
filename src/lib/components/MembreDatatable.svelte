@@ -32,7 +32,7 @@
 	}
 
 	function createAndOpenPdf(row: Membre) {
-		const renewalText = row.licence_renewal_type === 'Première' ? 'Pre' : "Ren";
+		const renewalText = row.licence_renewal_type === 'Première' ? 'NOU' : "REN";
 		const docDefinition = {
 			content: [
 				{

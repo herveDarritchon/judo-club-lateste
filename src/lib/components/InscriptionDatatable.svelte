@@ -97,6 +97,7 @@
 	}
 
 	function createAndOpenPdf(row: Inscription) {
+		const renewalText = row.licence_renewal_type === 'Première' ? 'NOU' : "REN";
 		const docDefinition = {
 			content: [
 				{
@@ -108,7 +109,14 @@
 				{
 					columns: [
 						{
-							width: '33%',
+							width: '10%',
+							text: [
+								{ text: renewalText, style: 'header' }
+							],
+							alignment: 'center'
+						},
+						{
+							width: '23%',
 							text: [
 								{ text: 'Activité: ', style: 'label' },
 								{ text: row.activity, style: 'subheader' }
